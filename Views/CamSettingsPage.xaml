@@ -1,0 +1,95 @@
+﻿<Page x:Class="SJ5000Plus.Views.CamSettingsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:Behaviors="using:Template10.Behaviors"
+      xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
+      xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
+      xmlns:controls="using:Template10.Controls"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="using:SJ5000Plus.Views"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="using:SJ5000Plus.ViewModels" mc:Ignorable="d"
+      Loaded="Page_Loaded">
+
+    <Page.DataContext>
+        <vm:CamSettingsPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="AdaptiveVisualStateGroup">
+                <VisualState x:Name="VisualStateNarrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NarrowMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for narrow view  -->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateNormal">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource NormalMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for normal view  -->
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="VisualStateWide">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="{StaticResource WideMinWidth}" />
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--  TODO: change properties for wide view  -->
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+
+        <!--  header  -->
+        <controls:PageHeader Content="Camera Settings" Frame="{x:Bind Frame}">
+            <Interactivity:Interaction.Behaviors>
+                <Behaviors:EllipsisBehavior Visibility="Auto" />
+            </Interactivity:Interaction.Behaviors>
+        </controls:PageHeader>
+
+        <Pivot x:Name="MyPivot" Grid.Row="1">
+            <PivotItem Header="Video">
+                <ScrollViewer Margin="0,12,-12,0" HorizontalContentAlignment="Left"
+                              VerticalScrollBarVisibility="Auto">
+                    <RelativePanel HorizontalAlignment="Left">
+                        <ComboBox Name="video_resolution_list" 
+                                  Header="Video Resolution"
+                                  ItemsSource="{Binding video_resolution_list, Mode=TwoWay}"
+                                  SelectedItem="{Binding video_resolution}"
+                                  DropDownOpened="DropDownOpened"></ComboBox>
+                        <ComboBox Header="Video Standard" 
+                                  Name="video_resolution_ComboBox" 
+                                  RelativePanel.Below="video_resolution_list"/>
+                    </RelativePanel>
+                </ScrollViewer>
+            </PivotItem>
+            <PivotItem Header="Photo">
+                <ScrollViewer Margin="0,12,-12,0" HorizontalContentAlignment="Left"
+                              VerticalScrollBarVisibility="Auto">
+                    <RelativePanel HorizontalAlignment="Left">
+                        <ComboBox Name="photo_size_list"
+                                  Header="Photo Size"
+                                  ItemsSource="{Binding photo_size_list, Mode=TwoWay}"
+                                  SelectedItem="{Binding photo_size}"
+                                  DropDownOpened="DropDownOpened"></ComboBox>
+                        <ComboBox  
+                                  Header="Photo Quality"
+                                  Name="photo_quality_ComboBox" 
+                                  RelativePanel.Below="photo_size_list"/>
+                    </RelativePanel>
+                </ScrollViewer>
+            </PivotItem>
+        </Pivot>
+
+    </Grid>
+</Page>
