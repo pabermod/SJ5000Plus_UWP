@@ -45,6 +45,7 @@ namespace SJ5000Plus.ViewModels
             return Task.CompletedTask;
         }
 
+
         public void GotoDetailsPage() =>
             NavigationService.Navigate(typeof(Views.DetailPage), Value);
 

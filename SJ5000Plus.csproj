@@ -97,11 +97,18 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CameraFacade.cs" />
+    <Compile Include="Camera.cs" />
+    <Compile Include="Globals.cs" />
+    <Compile Include="Helpers.cs" />
+    <Compile Include="Models\Camera.cs" />
+    <Compile Include="Models\ParamValues.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Services\CameraServices\CameraService.cs" />
+    <Compile Include="Services\CameraServices\FakeCameraService.cs" />
     <Compile Include="Services\CameraServices\ICameraService.cs" />
     <Compile Include="Services\SettingsServices\ISettingsService.cs" />
     <Compile Include="Services\SettingsServices\SettingsService.cs" />
+    <Compile Include="SocketClient.cs" />
     <Compile Include="ViewModels\CamSettingsPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\DetailPageViewModel.cs" />
@@ -126,6 +133,9 @@
     </Compile>
     <Compile Include="Views\Splash.xaml.cs">
       <DependentUpon>Splash.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\StartPage.xaml.cs">
+      <DependentUpon>StartPage.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -184,10 +194,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\StartPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Converters\" />
-    <Folder Include="Models\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Vocabulary\Vocabulary.csproj">
+      <Project>{ec511ab5-bb82-4f01-91d0-d3f3f776e4af}</Project>
+      <Name>Vocabulary</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

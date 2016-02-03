@@ -47,7 +47,7 @@
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
-            <RowDefinition />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
         <!--  page header  -->
@@ -58,32 +58,14 @@
                 <AppBarButton Click="{x:Bind ViewModel.GotoAbout}" Label="About" />
             </controls:PageHeader.SecondaryCommands>
         </controls:PageHeader>
-
         <!--  page content  -->
-        <StackPanel Grid.Row="1" VerticalAlignment="Top" Orientation="Horizontal"
+        <StackPanel Grid.Row="1" VerticalAlignment="Top"
                     Padding="12,8,0,0">
-
-            <controls:Resizer>
-                <TextBox Width="200" MinWidth="200" MinHeight="60"
-                         Margin="0" Header="Parameter to pass"
-                         Text="{Binding Value, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         TextWrapping="Wrap">
-                    <Interactivity:Interaction.Behaviors>
-                        <Behaviors:TextBoxEnterKeyBehavior>
-                            <Core:CallMethodAction MethodName="GotoDetailsPage" TargetObject="{Binding}" />
-                        </Behaviors:TextBoxEnterKeyBehavior>
-                        <Core:EventTriggerBehavior>
-                            <Behaviors:FocusAction />
-                        </Core:EventTriggerBehavior>
-                    </Interactivity:Interaction.Behaviors>
-                </TextBox>
-            </controls:Resizer>
-
-            <Button Margin="12,0" VerticalAlignment="Bottom"
-                    Click="{x:Bind ViewModel.GotoDetailsPage}" Content="Submit" />
+            <TextBlock HorizontalAlignment="Center">No Conectado</TextBlock>
+            <Button Margin="0,10,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Center"
+                    Click="{x:Bind ViewModel.GotoDetailsPage}" Content="Content" />
 
         </StackPanel>
-
     </Grid>
 </Page>
 

@@ -16,7 +16,7 @@ namespace Vocabulary.MessageCodecs
         public override async Task<CamSettingsMessage> Decode(string source)
         {
             //CamSettingsMessage Message = await Task.Factory.StartNew(() => JsonConvert.DeserializeObject<T>(source));
-            var settings = new JsonSerializerSettings { Converters = new[] { new ArrayToObjectConverter<Param>() } };
+            var settings = new JsonSerializerSettings { Converters = new[] { new ArrayToObjectConverter<Settings>() } };
             CamSettingsMessage Message = await Task.Factory.StartNew(
                 () => JsonConvert.DeserializeObject<CamSettingsMessage>(source,settings));
 

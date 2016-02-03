@@ -5,7 +5,7 @@
       xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:controls="using:Template10.Controls"
-      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:d="http:    //schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:SJ5000Plus.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:SJ5000Plus.ViewModels" mc:Ignorable="d"
@@ -65,11 +65,19 @@
                         <ComboBox Name="video_resolution_list" 
                                   Header="Video Resolution"
                                   ItemsSource="{Binding video_resolution_list, Mode=TwoWay}"
-                                  SelectedItem="{Binding video_resolution}"
-                                  DropDownOpened="DropDownOpened"></ComboBox>
+                                  SelectedItem="{Binding CurrentValues.video_resolution}"
+                                  DropDownOpened="DropDownOpened">
+
+                        </ComboBox>
                         <ComboBox Header="Video Standard" 
-                                  Name="video_resolution_ComboBox" 
+                                  Name="video_standard_list" 
+                                  ItemsSource="{Binding video_standard_list, Mode=TwoWay}"
+                                  SelectedItem="{Binding CurrentValues.video_standard}"
+                                  DropDownOpened="DropDownOpened"
                                   RelativePanel.Below="video_resolution_list"/>
+                        <ListView ItemsSource="{Binding video_standard_list, Mode=OneWay}"
+                                  RelativePanel.Below="video_standard_list">
+                        </ListView>
                     </RelativePanel>
                 </ScrollViewer>
             </PivotItem>
@@ -80,12 +88,13 @@
                         <ComboBox Name="photo_size_list"
                                   Header="Photo Size"
                                   ItemsSource="{Binding photo_size_list, Mode=TwoWay}"
-                                  SelectedItem="{Binding photo_size}"
+                                  SelectedItem="{Binding CurrentValues.photo_size}"
                                   DropDownOpened="DropDownOpened"></ComboBox>
                         <ComboBox  
                                   Header="Photo Quality"
-                                  Name="photo_quality_ComboBox" 
+                                  Name="photo_quality_list" 
                                   RelativePanel.Below="photo_size_list"/>
+
                     </RelativePanel>
                 </ScrollViewer>
             </PivotItem>

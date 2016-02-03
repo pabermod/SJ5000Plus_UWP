@@ -25,7 +25,13 @@
       </uap:VisualElements>
     </Application>
   </Applications>
-  <Capabilities>
+    <Capabilities>
+    <Capability Name="privateNetworkClientServer" />
     <Capability Name="internetClient" />
+    <uap:Capability Name="videosLibrary" />
+    <uap:Capability Name="picturesLibrary" />
+    <uap:Capability Name="removableStorage" />
+    <DeviceCapability Name="wiFiControl" />
+    <DeviceCapability Name="radios" />
   </Capabilities>
 </Package>

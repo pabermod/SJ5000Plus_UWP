@@ -24,12 +24,17 @@ namespace SJ5000Plus.Views
     /// </summary>
     public sealed partial class CamSettingsPage : Page
     {
+        private Camera _Camera = null;
+        private Helpers _Helper;
+        private bool _isConnected = false;
         public CamSettingsPage()
         {
             this.InitializeComponent();
+
+            _Helper = new Helpers();
         }
 
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             var index = Template10.Services.SerializationService.SerializationService
                 .Json.Deserialize<int>(e.Parameter?.ToString());
@@ -38,6 +43,8 @@ namespace SJ5000Plus.Views
 
         private async void DropDownOpened(object sender, object e)
         {
+            ViewModel.PopulateValues(sender as ComboBox);
+            /*
             ComboBox CBox = sender as ComboBox;
             if (CBox.Items.Count == 1)
             {
@@ -48,19 +55,52 @@ namespace SJ5000Plus.Views
                 CBox.SelectedItem = null;
 
                 //Populate Values
-                await CameraFacade.PopulateValues(ViewModel, CBox.Name);
+                await _Camera.PopulateValues(ViewModel, CBox.Name);
 
                 // Select the value again
                 CBox.SelectedItem = currentValue;
 
                 // Now set the handler for SelectionChanged
-                //CBox.SelectionChanged += DropDownSelectionChanged;             
+                CBox.SelectionChanged += DropDownSelectionChanged;             
             }
+            */
+        }
+
+        private void DropDownSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            await CameraFacade.PopulateSettings(ViewModel);
+            // Check WiFi Connection
+            //_isWiFiOn = await _Helper.CheckRadio();
+            /*
+            _isConnected = await _Helper.CheckWiFi();
+            if (_isConnected)
+            {
+                Globals.SetIsConnected(true);
+            }
+
+            // Check Connection
+            if (Globals.isConnected)
+            {
+                _Camera = new Camera(Globals.CameraIP, Globals.CameraPort);
+            }
+            else
+            {
+                _Helper.WifiSettingsDialog("No conectado a la camara");
+            }
+            if (_Camera != null)
+            {
+                _isConnected = await _Camera.Connect();
+                if (_isConnected)
+                {
+                    await _Camera.GetToken();
+                    await _Camera.PopulateSettings(ViewModel);
+                }
+            }   
+            */       
         }
     }
 }

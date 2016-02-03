@@ -15,7 +15,6 @@
                           DisableBackButtonWhenModal="True">
         <Controls:ModalDialog.Content>
             <Controls:HamburgerMenu x:Name="MyHamburgerMenu">
-
                 <Controls:HamburgerMenu.PrimaryButtons>
                     <!--  mainpage button  -->
                     <Controls:HamburgerButtonInfo ClearHistory="True" PageType="views:MainPage">
