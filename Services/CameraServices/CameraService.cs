@@ -4,8 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using SJ5000Plus.Models;
-using Vocabulary;
-using Vocabulary.Messages;
 
 namespace SJ5000Plus.Services.CameraServices
 {
@@ -16,7 +14,7 @@ namespace SJ5000Plus.Services.CameraServices
             throw new NotImplementedException();
         }
 
-        public Task<CamGetParamValuesMessage> GetParamValues(string param)
+        public Task<Vocabulary.Messages.CamGetParamValuesMessage> GetParamValues(string param)
         {
             throw new NotImplementedException();
         }

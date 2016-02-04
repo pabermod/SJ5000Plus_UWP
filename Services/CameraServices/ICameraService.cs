@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Vocabulary;
-using Vocabulary.Messages;
 
 namespace SJ5000Plus.Services.CameraServices
 {
@@ -13,6 +11,6 @@ namespace SJ5000Plus.Services.CameraServices
     {
         Task<Settings> GetCurrentValues();
 
-        Task<CamGetParamValuesMessage> GetParamValues(string param);
+        Task<Vocabulary.Messages.CamGetParamValuesMessage> GetParamValues(string param);
     }
 }

@@ -31,7 +31,7 @@ namespace SJ5000Plus
         {
             Vocabulary.Settings ReceivedSettings = await GetSettings();
 
-            settings.video_resolution_list.Add(ReceivedSettings.video_resolution);
+            settings.video_resolution_list.Add(ReceivedSettings.video_resolution.ToString());
             settings.CurrentValues.video_resolution = ReceivedSettings.video_resolution;
             settings.photo_size_list.Add(ReceivedSettings.photo_size);
             settings.CurrentValues.photo_size = ReceivedSettings.photo_size;
