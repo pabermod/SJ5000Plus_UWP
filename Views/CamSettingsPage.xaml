@@ -5,7 +5,7 @@
       xmlns:Core="using:Microsoft.Xaml.Interactions.Core"
       xmlns:Interactivity="using:Microsoft.Xaml.Interactivity"
       xmlns:controls="using:Template10.Controls"
-      xmlns:d="http:    //schemas.microsoft.com/expression/blend/2008"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:local="using:SJ5000Plus.Views"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
       xmlns:vm="using:SJ5000Plus.ViewModels" mc:Ignorable="d"
@@ -65,19 +65,52 @@
                         <ComboBox Name="video_resolution_list" 
                                   Header="Video Resolution"
                                   ItemsSource="{Binding video_resolution_list, Mode=TwoWay}"
+                                  SelectedItem="{Binding CurrentValues.video_resolution, Mode=TwoWay}"
+                                  DropDownOpened="DropDownOpened"/>
+                        <ComboBox Name="video_quality_list" 
+                                  Header="Video Quality"
+                                  ItemsSource="{Binding video_resolution_list, Mode=TwoWay}"
                                   SelectedItem="{Binding CurrentValues.video_resolution}"
-                                  DropDownOpened="DropDownOpened">
-
-                        </ComboBox>
+                                  DropDownOpened="DropDownOpened"
+                                  RelativePanel.Below="video_resolution_list"/>
                         <ComboBox Header="Video Standard" 
                                   Name="video_standard_list" 
                                   ItemsSource="{Binding video_standard_list, Mode=TwoWay}"
                                   SelectedItem="{Binding CurrentValues.video_standard}"
                                   DropDownOpened="DropDownOpened"
-                                  RelativePanel.Below="video_resolution_list"/>
-                        <ListView ItemsSource="{Binding video_standard_list, Mode=OneWay}"
-                                  RelativePanel.Below="video_standard_list">
-                        </ListView>
+                                  RelativePanel.Below="video_quality_list"/>
+                        <ComboBox Header="Video Stamp" 
+                                  Name="video_stamp" 
+                                  ItemsSource="{Binding video_standard_list, Mode=TwoWay}"
+                                  SelectedItem="{Binding CurrentValues.video_stamp}"
+                                  DropDownOpened="DropDownOpened"
+                                  RelativePanel.Below="video_standard_list"/>
+                        <ComboBox Header="Timelapse Video" 
+                                  Name="timelapse_video_list" 
+                                  ItemsSource="{Binding video_standard_list, Mode=TwoWay}"
+                                  SelectedItem="{Binding CurrentValues.timelapse_video}"
+                                  DropDownOpened="DropDownOpened"
+                                  RelativePanel.Below="video_stamp"/>
+                        <ComboBox Header="Loop Record" 
+                                  Name="loop_record_list" 
+                                  ItemsSource="{Binding video_standard_list, Mode=TwoWay}"
+                                  SelectedItem="{Binding CurrentValues.loop_record}"
+                                  DropDownOpened="DropDownOpened"
+                                  RelativePanel.Below="timelapse_video_list"/>
+                        <ComboBox Header="Motion Detection" 
+                                  Name="motion_detec_video_list" 
+                                  ItemsSource="{Binding video_standard_list, Mode=TwoWay}"
+                                  SelectedItem="{Binding CurrentValues.motion_detec_video}"
+                                  DropDownOpened="DropDownOpened"
+                                  RelativePanel.Below="loop_record_list"/>
+                        <ToggleSwitch Name="save_low_resolution_clip" 
+                                      Header="Save Low resolution clip"
+                                      RelativePanel.Below="motion_detec_video_list"/>
+                        <ListView Name="list_view"
+                                  ItemsSource="{Binding video_resolution_list, Mode=OneWay}"
+                                  RelativePanel.Below="save_low_resolution_clip"/>
+                        <TextBox Text="{Binding CurrentValues.video_resolution, Mode=OneWay}" 
+                                 RelativePanel.Below="list_view"/>
                     </RelativePanel>
                 </ScrollViewer>
             </PivotItem>
@@ -89,14 +122,42 @@
                                   Header="Photo Size"
                                   ItemsSource="{Binding photo_size_list, Mode=TwoWay}"
                                   SelectedItem="{Binding CurrentValues.photo_size}"
-                                  DropDownOpened="DropDownOpened"></ComboBox>
-                        <ComboBox  
+                                  DropDownOpened="DropDownOpened"/>
+                        <ComboBox Name="photo_quality_list" 
                                   Header="Photo Quality"
-                                  Name="photo_quality_list" 
+                                  SelectedItem="{Binding CurrentValues.photo_quality}"
+                                  DropDownOpened="DropDownOpened"
                                   RelativePanel.Below="photo_size_list"/>
-
+                        <ComboBox Name="photo_stamp_list" 
+                                  Header="Photo Stamp"
+                                  SelectedItem="{Binding CurrentValues.photo_stamp}"
+                                  DropDownOpened="DropDownOpened"
+                                  RelativePanel.Below="photo_quality_list"/>
+                        <ComboBox Name="timelapse_photo_list" 
+                                  Header="Timelapse Photo"
+                                  SelectedItem="{Binding CurrentValues.timelapse_photo}"
+                                  DropDownOpened="DropDownOpened"
+                                  RelativePanel.Below="photo_stamp_list"/>
+                        <ComboBox Name="selfie_photo_list" 
+                                  Header="Selfie Photo"
+                                  SelectedItem="{Binding CurrentValues.selfie_photo}"
+                                  DropDownOpened="DropDownOpened"
+                                  RelativePanel.Below="timelapse_photo_list"/>
+                        <ComboBox Name="burst_photo_list" 
+                                  Header="Burst Photo"
+                                  SelectedItem="{Binding CurrentValues.burst_photo}"
+                                  DropDownOpened="DropDownOpened"
+                                  RelativePanel.Below="selfie_photo_list"/>
+                        <ComboBox Name="autoshoot_photo_list" 
+                                  Header="Autoshoot Photo"
+                                  SelectedItem="{Binding CurrentValues.autoshoot_photo}"
+                                  DropDownOpened="DropDownOpened"
+                                  RelativePanel.Below="burst_photo_list"/>
                     </RelativePanel>
                 </ScrollViewer>
+            </PivotItem>
+            <PivotItem Header="Other">
+                
             </PivotItem>
         </Pivot>
 

@@ -1,19 +1,25 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Vocabulary
 {
-    public class Settings
+    public class Settings : INotifyPropertyChanged
     {
-        public string camera_clock { get; set; }
+        public string camera_clock { get; set; } //No añadido
         public string video_standard { get; set; }
-        public string app_status { get; set; }
-        public string stream_out_type { get; set; }
+        public string app_status { get; set; } //No añadido
+        public string stream_out_type { get; set; } //No añadido
         public string save_low_resolution_clip { get; set; }
-        public string video_resolution { get; set; }
+
+        private string jaja;
+        public string video_resolution {
+            get { return jaja; }
+            set { jaja = value; OnPropertyChanged("video_resolution"); }
+        }
         public string video_stamp { get; set; }
         public string video_quality { get; set; }
         public string timelapse_video { get; set; }
@@ -26,6 +32,8 @@ namespace Vocabulary
         public string autoshoot_photo { get; set; }
         public string loop_record { get; set; }
         public string motion_detec_video { get; set; }
+
+        // Falta desde aquí
         public string status_led_switch { get; set; }
         public string wifi_led_switch { get; set; }
         public string osd_switch { get; set; }
@@ -40,5 +48,13 @@ namespace Vocabulary
         public string light_freq { get; set; }
         public string meter_mode { get; set; }
         public string buzzer { get; set; }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        //Create OnPropertyChanged method to raise event
+        protected void OnPropertyChanged(string PropertyName)
+        {
+            if (PropertyChanged != null)
+                PropertyChanged(this, new PropertyChangedEventArgs(PropertyName));
+        }
     }
 }

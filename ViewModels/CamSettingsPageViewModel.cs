@@ -16,39 +16,36 @@ namespace SJ5000Plus.ViewModels
     public class CamSettingsPageViewModel : ViewModelBase
     {
         private ICameraService _camService;
-
         private string _permission;
+        private Settings _CurrentValues;
 
+        /// <summary>
+        /// Permission to set a Param
+        /// </summary>
         public string permission
         {
             get { return _permission; }
             set { Set(ref _permission, value); }
         }
 
-        private Settings _CurrentValues;
+        /// <summary>
+        /// Current Params value
+        /// </summary>
         public Settings CurrentValues
         {
             get { return _CurrentValues; }
             set { Set(ref _CurrentValues, value); }
         }
-        /*
-        private string _video_resolution;
-        public string video_resolution
-        {
-            get { return _video_resolution; }
-            set { Set(ref _video_resolution, value); }
-        }
-        private string _photo_size;
-        public string photo_size
-        {
-            get { return _photo_size; }
-            set { Set(ref _photo_size, value); }
-        }
-        */
+
+
+        private ObservableCollection<string> _video_resolution_list;
         public ObservableCollection<string> video_resolution_list { get; set; }
         public ObservableCollection<string> photo_size_list { get; set; }
         public ObservableCollection<string> video_standard_list { get; set; }
 
+        /// <summary>
+        /// ViewModel Constructor. Initializes the camera service, the lists and populates them.
+        /// </summary>
         public CamSettingsPageViewModel()
         {
             // Set the Camera Service
@@ -58,8 +55,8 @@ namespace SJ5000Plus.ViewModels
             video_resolution_list = new ObservableCollection<string>();
             photo_size_list = new ObservableCollection<string>();
             video_standard_list = new ObservableCollection<string>();
-
-
+            
+            // Populate all list with the current value
             PopulateAllSettings();
         }
 
