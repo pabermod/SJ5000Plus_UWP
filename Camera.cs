@@ -31,16 +31,17 @@ namespace SJ5000Plus
         {
             Vocabulary.Settings ReceivedSettings = await GetSettings();
 
-            settings.video_resolution_list.Add(ReceivedSettings.video_resolution.ToString());
-            settings.CurrentValues.video_resolution = ReceivedSettings.video_resolution;
-            settings.photo_size_list.Add(ReceivedSettings.photo_size);
-            settings.CurrentValues.photo_size = ReceivedSettings.photo_size;
+            //settings.video_resolution_list.Add(ReceivedSettings.video_resolution.ToString());
+            //settings.CurrentValues.video_resolution = ReceivedSettings.video_resolution;
+            //settings.photo_size_list.Add(ReceivedSettings.photo_size);
+            //settings.CurrentValues.photo_size = ReceivedSettings.photo_size;
         }
 
         public async Task PopulateValues(CamSettingsPageViewModel cameraSettings, string name)
         {
             CamGetParamValuesMessage Values = await GetParamValues(name);
-            ObservableCollection<string> Source = (ObservableCollection<string>)cameraSettings.GetPropertyValue(name);
+            //ObservableCollection<string> Source = (ObservableCollection<string>)cameraSettings.GetPropertyValue(name);
+            ObservableCollection<string> Source = new ObservableCollection<string>();
 
             foreach (var item in Values.options)
             {

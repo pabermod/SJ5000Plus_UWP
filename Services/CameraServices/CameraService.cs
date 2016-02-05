@@ -9,7 +9,7 @@ namespace SJ5000Plus.Services.CameraServices
 {
     public class CameraService : ICameraService
     {
-        public Task<Settings> GetCurrentValues()
+        public Task<Vocabulary.Settings> GetCurrentValues()
         {
             throw new NotImplementedException();
         }

@@ -109,7 +109,6 @@
   <ItemGroup>
     <Compile Include="ArrayToObjectConverter.cs" />
     <Compile Include="Icodec.cs" />
-    <Compile Include="ISettings.cs" />
     <Compile Include="JsonMessageCodec.cs" />
     <Compile Include="MessageCodecs\CameraMessageCodec.cs" />
     <Compile Include="MessageCodecs\CamGetParamValueMessageCodec.cs" />

@@ -16,82 +16,15 @@ namespace SJ5000Plus.ViewModels
     public class CamSettingsPageViewModel : ViewModelBase
     {
         private ICameraService _camService;
-        private string _permission;
-
-        /// <summary>
-        /// Permission to set a Param
-        /// </summary>
-        public string permission
-        {
-            get { return _permission; }
-            set { Set(ref _permission, value); }
-        }
-
-        public Models.Settings CurrentValues { get; set; }
-
-
-        public ObservableCollection<string> video_resolution_list { get; set; }
-        public ObservableCollection<string> video_quality_list { get; set; }
-        public ObservableCollection<string> video_standard_list { get; set; }
-        public ObservableCollection<string> video_stamp_list { get; set; }
-        public ObservableCollection<string> timelapse_video_list { get; set; }
-        public ObservableCollection<string> loop_record_list { get; set; }
-        public ObservableCollection<string> motion_detection_list { get; set; }
-
-        public ObservableCollection<string> photo_size_list { get; set; }
-        public ObservableCollection<string> photo_stamp_list { get; set; }
-        public ObservableCollection<string> photo_quality_list { get; set; }
-        //public ObservableCollection<string> timelapse_photo_list { get; set; }
-        public ObservableCollection<string> selfie_photo_list { get; set; }
-        public ObservableCollection<string> burst_photo_list { get; set; }
-        public ObservableCollection<string> autoshoot_photo_list { get; set; }
-
-        public ObservableCollection<string> status_led_switch_list { get; set; }
-        public ObservableCollection<string> delay_pwroff_list { get; set; }
-        public ObservableCollection<string> rotate_image_list { get; set; }
-        public ObservableCollection<string> mic_vol_list { get; set; }
-        public ObservableCollection<string> language_list { get; set; }
-        public ObservableCollection<string> date_disp_fmt_list { get; set; }
-        public ObservableCollection<string> auto_bkl_off_list { get; set; }
-        public ObservableCollection<string> auto_pwr_off_list { get; set; }
-        public ObservableCollection<string> light_freq_list { get; set; }
-        public ObservableCollection<string> meter_mode_list { get; set; }
+        public Models.Settings Settings { get; set; }
 
         /// <summary>
         /// ViewModel Constructor. Initializes the camera service, the lists and populates them.
         /// </summary>
         public CamSettingsPageViewModel()
         {
-            // Set the Camera Service
             _camService = new FakeCameraService();
-
-            // Initialise the lists
-            video_resolution_list = new ObservableCollection<string>();
-            video_quality_list = new ObservableCollection<string>();
-            video_standard_list = new ObservableCollection<string>();
-            video_stamp_list = new ObservableCollection<string>();
-            timelapse_video_list = new ObservableCollection<string>();
-            loop_record_list = new ObservableCollection<string>();
-            motion_detection_list = new ObservableCollection<string>();
-            photo_size_list = new ObservableCollection<string>();
-            photo_stamp_list = new ObservableCollection<string>();
-            photo_quality_list = new ObservableCollection<string>();
-            //timelapse_photo_list = new ObservableCollection<string>();
-            selfie_photo_list = new ObservableCollection<string>();
-            burst_photo_list = new ObservableCollection<string>();
-            autoshoot_photo_list = new ObservableCollection<string>();
-            status_led_switch_list = new ObservableCollection<string>();
-            delay_pwroff_list = new ObservableCollection<string>();
-            rotate_image_list = new ObservableCollection<string>();
-            mic_vol_list = new ObservableCollection<string>();
-            language_list = new ObservableCollection<string>();
-            date_disp_fmt_list = new ObservableCollection<string>();
-            auto_bkl_off_list = new ObservableCollection<string>();
-            auto_pwr_off_list = new ObservableCollection<string>();
-            light_freq_list = new ObservableCollection<string>();
-            meter_mode_list = new ObservableCollection<string>();
-
-            // Populate all list with the current value
+            Settings = new Models.Settings();
             PopulateAllSettings();
         }
 
@@ -103,23 +36,39 @@ namespace SJ5000Plus.ViewModels
             // Get the current values
             var task = _camService.GetCurrentValues();
             task.Wait();
-            CurrentValues = task.Result;
+            Vocabulary.Settings CurrentValues = task.Result;
 
-            // Add the current value to the lists
-            video_resolution_list.Add(CurrentValues.video_resolution);
-            video_standard_list.Add(CurrentValues.video_standard);
-            video_quality_list.Add(CurrentValues.video_quality);
-            video_stamp_list.Add(CurrentValues.video_stamp);
-            timelapse_video_list.Add(CurrentValues.timelapse_video);
-            loop_record_list.Add(CurrentValues.loop_record);
-            motion_detection_list.Add(CurrentValues.motion_detec_video);
+            // Populate the current value and the lists
+            Settings.video_resolution.Values.Add(CurrentValues.video_resolution);
+            Settings.video_standard.Values.Add(CurrentValues.video_standard);
+            Settings.video_quality.Values.Add(CurrentValues.video_quality);
+            Settings.video_stamp.Values.Add(CurrentValues.video_stamp);
+            Settings.timelapse_video.Values.Add(CurrentValues.timelapse_video);
+            Settings.loop_record.Values.Add(CurrentValues.loop_record);
+            Settings.motion_detec_video.Values.Add(CurrentValues.motion_detec_video);
 
+            Settings.video_resolution.currentValue = CurrentValues.video_resolution;
+            Settings.video_standard.currentValue = CurrentValues.video_standard;
+            Settings.video_quality.currentValue = CurrentValues.video_quality;
+            Settings.video_stamp.currentValue = CurrentValues.video_stamp;
+            Settings.timelapse_video.currentValue = CurrentValues.timelapse_video;
+            Settings.loop_record.currentValue = CurrentValues.loop_record;
+            Settings.motion_detec_video.currentValue = CurrentValues.motion_detec_video;
+            Settings.photo_size.currentValue = CurrentValues.photo_size;
+            Settings.photo_stamp.currentValue = CurrentValues.photo_stamp;
+            Settings.photo_quality.currentValue = CurrentValues.photo_quality;
+            Settings.selfie_photo.currentValue = CurrentValues.selfie_photo;
+            Settings.burst_photo.currentValue = CurrentValues.burst_photo;
+            Settings.autoshoot_photo.currentValue = CurrentValues.autoshoot_photo;
+
+            /*
             photo_size_list.Add(CurrentValues.photo_size);
             photo_stamp_list.Add(CurrentValues.photo_stamp);
             photo_quality_list.Add(CurrentValues.photo_quality);
             selfie_photo_list.Add(CurrentValues.selfie_photo);
             burst_photo_list.Add(CurrentValues.burst_photo);
             autoshoot_photo_list.Add(CurrentValues.autoshoot_photo);
+            */
         }
 
         public async void PopulateValues(ComboBox CBox)
@@ -135,38 +84,39 @@ namespace SJ5000Plus.ViewModels
                 //Get the Values
                 CamGetParamValuesMessage Param = await _camService.GetParamValues(CBox.Name);
 
-                // Get the collection
-                ObservableCollection<string> Source = (ObservableCollection<string>)GetPropertyValue(CBox.Name);
+                // Get the Param and update its values with reflexion
+                Models.Param parameter = (Models.Param)GetPropertyValue(CBox.Name);
 
-                // Update it
                 foreach (var item in Param.options)
                 {
-                    Source.Add(item);
+                    parameter.Values.Add(item);
                 }
-
+                
                 // Remove the first one (so it isn't repeated)
-                Source.RemoveAt(0);
+                parameter.Values.RemoveAt(0);
 
                 // Select the value again
-                CBox.SelectedItem = currentValue;
+                parameter.currentValue = currentValue;
 
-                _permission = Param.permission;
+                parameter.permission = Param.permission;
 
                 // Now set the handler for SelectionChanged
                 //CBox.SelectionChanged += DropDownSelectionChanged;
+
             }
         }
 
         /// <summary>
-        /// Returns the value of the property of the specified property;
+        /// Returns the value of the property of Settings
         /// </summary>
-        public object GetPropertyValue(string propertyName)
+        private object GetPropertyValue(string propertyName)
         {
             try
             {
-                return this.GetType().GetProperty(propertyName).GetValue(this, null);
+                return this.Settings.GetType().GetProperty(propertyName).GetValue(this.Settings, null);
             }
             catch { return null; }
         }
+
     }
 }

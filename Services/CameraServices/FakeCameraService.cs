@@ -9,9 +9,9 @@ namespace SJ5000Plus.Services.CameraServices
 {
     public class FakeCameraService : ICameraService
     {
-        public async Task<Settings> GetCurrentValues()
+        public async Task<Vocabulary.Settings> GetCurrentValues()
         {
-            Settings sett = new Settings();
+            Vocabulary.Settings sett = new Vocabulary.Settings();
             sett.video_resolution = "1080p";
             sett.video_standard = "NTSC";
             sett.video_quality = "Super Fine";
@@ -33,24 +33,24 @@ namespace SJ5000Plus.Services.CameraServices
         {
             Vocabulary.Messages.CamGetParamValuesMessage Param = new Vocabulary.Messages.CamGetParamValuesMessage(0, 0, param, "settable", new List<string>());
 
-            if (param.Equals("video_resolution_list"))
+            if (param.Equals("video_resolution"))
             {
                 Param.options.Add("1080p");
                 Param.options.Add("720p");
                 Param.options.Add("480p");
             }
-            else if (param.Equals("video_standard_list"))
+            else if (param.Equals("video_standard"))
             {
                 Param.options.Add("NTSC");
                 Param.options.Add("PAL");
             }
-            else if (param.Equals("photo_size_list"))
+            else if (param.Equals("photo_size"))
             {
                 Param.options.Add("20 MP");
                 Param.options.Add("16 MP");
                 Param.options.Add("12 MP");
             }
-            else if (param.Equals("video_quality_list"))
+            else if (param.Equals("video_quality"))
             {
                 Param.options.Add("Super Fine");
                 Param.options.Add("Fine");

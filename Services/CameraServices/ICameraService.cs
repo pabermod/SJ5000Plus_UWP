@@ -9,7 +9,7 @@ namespace SJ5000Plus.Services.CameraServices
 {
     public interface ICameraService
     {
-        Task<Settings> GetCurrentValues();
+        Task<Vocabulary.Settings> GetCurrentValues();
 
         Task<Vocabulary.Messages.CamGetParamValuesMessage> GetParamValues(string param);
     }

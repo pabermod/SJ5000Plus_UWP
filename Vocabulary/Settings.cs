@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Vocabulary
 {
-    public class Settings : ISettings
+    public class Settings
     {
         public string camera_clock { get; set; }
         public string video_standard { get; set; }
