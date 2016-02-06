@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Template10.Mvvm;
 using Vocabulary;
 using Vocabulary.Messages;
+using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 
 namespace SJ5000Plus.ViewModels
@@ -104,9 +105,14 @@ namespace SJ5000Plus.ViewModels
                 parameter.permission = Param.permission;
 
                 // Now set the handler for SelectionChanged
-                //CBox.SelectionChanged += DropDownSelectionChanged;
-
+                CBox.SelectionChanged += DropDownSelectionChanged;
             }
+        }
+
+        private async void DropDownSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            ComboBox CBox = sender as ComboBox;
+            await _camService.SetParamValue(CBox.Name, CBox.SelectedItem.ToString());
         }
 
         /// <summary>

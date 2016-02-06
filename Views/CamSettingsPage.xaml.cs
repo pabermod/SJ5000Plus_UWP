@@ -46,11 +46,6 @@ namespace SJ5000Plus.Views
             ViewModel.PopulateValues(sender as ComboBox);
         }
 
-        private void DropDownSelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            
-        }
-
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             // Check WiFi Connection

@@ -18,5 +18,10 @@ namespace SJ5000Plus.Services.CameraServices
         {
             throw new NotImplementedException();
         }
+
+        public Task SetParamValue(string name, string selectedItem)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

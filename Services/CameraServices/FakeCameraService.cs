@@ -1,8 +1,5 @@
-﻿using SJ5000Plus.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace SJ5000Plus.Services.CameraServices
@@ -57,6 +54,12 @@ namespace SJ5000Plus.Services.CameraServices
                 Param.options.Add("Normal");
             }
             return Param;
+        }
+
+        public Task SetParamValue(string Param, string Value)
+        {
+            Vocabulary.Messages.CamParamMessage Msg = new Vocabulary.Messages.CamParamMessage(9, 0, Value);
+            return Task.CompletedTask;
         }
     }
 }

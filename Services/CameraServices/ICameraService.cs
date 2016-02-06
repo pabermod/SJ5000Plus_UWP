@@ -12,5 +12,6 @@ namespace SJ5000Plus.Services.CameraServices
         Task<Vocabulary.Settings> GetCurrentValues();
 
         Task<Vocabulary.Messages.CamGetParamValuesMessage> GetParamValues(string param);
+        Task SetParamValue(string name, string selectedItem);
     }
 }
