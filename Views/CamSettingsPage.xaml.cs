@@ -44,26 +44,6 @@ namespace SJ5000Plus.Views
         private async void DropDownOpened(object sender, object e)
         {
             ViewModel.PopulateValues(sender as ComboBox);
-            /*
-            ComboBox CBox = sender as ComboBox;
-            if (CBox.Items.Count == 1)
-            {
-                string currentValue = CBox.SelectedItem.ToString();
-
-                // To avoid ComboBox closing:
-                // Deselect the current Item
-                CBox.SelectedItem = null;
-
-                //Populate Values
-                await _Camera.PopulateValues(ViewModel, CBox.Name);
-
-                // Select the value again
-                CBox.SelectedItem = currentValue;
-
-                // Now set the handler for SelectionChanged
-                CBox.SelectionChanged += DropDownSelectionChanged;             
-            }
-            */
         }
 
         private void DropDownSelectionChanged(object sender, SelectionChangedEventArgs e)

@@ -71,6 +71,9 @@ namespace SJ5000Plus.ViewModels
             */
         }
 
+        /// <summary>
+        /// Populate a combobox with the possible values
+        /// </summary>
         public async void PopulateValues(ComboBox CBox)
         {
             if (CBox.Items.Count == 1)
