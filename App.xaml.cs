@@ -2,6 +2,7 @@ using System;
 using Windows.UI.Xaml;
 using System.Threading.Tasks;
 using SJ5000Plus.Services.SettingsServices;
+using SJ5000Plus.Services.CameraServices;
 using Windows.ApplicationModel.Activation;
 
 namespace SJ5000Plus
@@ -11,6 +12,8 @@ namespace SJ5000Plus
 
     sealed partial class App : Template10.Common.BootStrapper
     {
+        public CameraService Camera;
+
         public App()
         {
             InitializeComponent();
@@ -24,6 +27,7 @@ namespace SJ5000Plus
             ShowShellBackButton = _settings.UseShellBackButton;
 
             #endregion
+
         }
 
         // runs even if restored from state
@@ -42,6 +46,7 @@ namespace SJ5000Plus
         // runs only when not restored from state
         public override Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
+            Camera = new CameraService(Globals.CameraIP, Globals.CameraPort);
             NavigationService.Navigate(typeof(Views.MainPage));
             return Task.CompletedTask;
         }

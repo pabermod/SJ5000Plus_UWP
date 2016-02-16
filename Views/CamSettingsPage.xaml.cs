@@ -34,12 +34,14 @@ namespace SJ5000Plus.Views
             _Helper = new Helpers();
         }
 
+        
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            var index = Template10.Services.SerializationService.SerializationService
-                .Json.Deserialize<int>(e.Parameter?.ToString());
-            MyPivot.SelectedIndex = index;
+            //var index = Template10.Services.SerializationService.SerializationService
+            //    .Json.Deserialize<int>(e.Parameter?.ToString());
+            //MyPivot.SelectedIndex = index;
         }
+        
 
         private async void DropDownOpened(object sender, object e)
         {

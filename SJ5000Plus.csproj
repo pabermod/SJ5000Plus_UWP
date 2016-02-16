@@ -111,7 +111,7 @@
     <Compile Include="Services\CameraServices\ICameraService.cs" />
     <Compile Include="Services\SettingsServices\ISettingsService.cs" />
     <Compile Include="Services\SettingsServices\SettingsService.cs" />
-    <Compile Include="SocketClient.cs" />
+    <Compile Include="Services\SocketService.cs" />
     <Compile Include="ViewModels\CamSettingsPageViewModel.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\DetailPageViewModel.cs" />

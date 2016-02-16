@@ -8,12 +8,12 @@ using Windows.Networking;
 using Windows.Storage.Streams;
 using Vocabulary;
 
-namespace SJ5000Plus
+namespace SJ5000Plus.Services
 {
     /// <summary>
     /// Socket Client Class
     /// </summary>
-    public class SocketClient
+    public class SocketService
     {
         // Timeout of reception
         const int RECV_TIMEOUT = 1000;
@@ -32,7 +32,7 @@ namespace SJ5000Plus
         /// <summary>
         /// Constructor with camera IP and port as params
         /// </summary>
-        public SocketClient(string server, int port)
+        public SocketService(string server, int port)
         {
             _server = server;
             _port = port;

@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 using SJ5000Plus.ViewModels;
 using Vocabulary.MessageCodecs;
 using Vocabulary.Messages;
+using SJ5000Plus.Services;
 
 namespace SJ5000Plus
 {
     public class Camera
     {
         private bool _connected;
-        private SocketClient _CameraSocket;
+        private SocketService _CameraSocket;
         private int _token = 0;
         private string _permission = string.Empty;
 
@@ -24,7 +25,7 @@ namespace SJ5000Plus
         }
         public Camera(IPAddress CameraIP, int Port)
         {
-            _CameraSocket = new SocketClient(CameraIP.ToString(), Port);       
+            //_CameraSocket = new SocketService(CameraIP.ToString(), Port);       
         }
 
         public async Task PopulateSettings(CamSettingsPageViewModel settings)

@@ -11,6 +11,8 @@ using Vocabulary;
 using Vocabulary.Messages;
 using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Navigation;
+using Template10.Services.NavigationService;
 
 namespace SJ5000Plus.ViewModels
 {
@@ -24,20 +26,27 @@ namespace SJ5000Plus.ViewModels
         /// </summary>
         public CamSettingsPageViewModel()
         {
-            _camService = new FakeCameraService();
+            //_camService = new FakeCameraService();
             Settings = new Models.Settings();
-            PopulateAllSettings();
+            //PopulateAllSettings();
+        }
+
+        public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
+        {           
+            if (parameter != null)
+            {
+                _camService = parameter as CameraService;
+            }
+            await PopulateAllSettings();
         }
 
         /// <summary>
         /// Populate the lists with the current values
         /// </summary>
-        private void PopulateAllSettings()
+        private async Task PopulateAllSettings()
         {
             // Get the current values
-            var task = _camService.GetCurrentValues();
-            task.Wait();
-            Vocabulary.Settings CurrentValues = task.Result;
+            Vocabulary.Settings CurrentValues = await (App.Current as App).Camera.GetCurrentValues();
 
             // Populate the current value and the lists
             Settings.video_resolution.Values.Add(CurrentValues.video_resolution);
@@ -62,14 +71,14 @@ namespace SJ5000Plus.ViewModels
             Settings.burst_photo.currentValue = CurrentValues.burst_photo;
             Settings.autoshoot_photo.currentValue = CurrentValues.autoshoot_photo;
 
-            /*
-            photo_size_list.Add(CurrentValues.photo_size);
-            photo_stamp_list.Add(CurrentValues.photo_stamp);
-            photo_quality_list.Add(CurrentValues.photo_quality);
-            selfie_photo_list.Add(CurrentValues.selfie_photo);
-            burst_photo_list.Add(CurrentValues.burst_photo);
-            autoshoot_photo_list.Add(CurrentValues.autoshoot_photo);
-            */
+
+            Settings.photo_size.Values.Add(CurrentValues.photo_size);
+            Settings.photo_stamp.Values.Add(CurrentValues.photo_stamp);
+            Settings.photo_quality.Values.Add(CurrentValues.photo_quality);
+            Settings.selfie_photo.Values.Add(CurrentValues.selfie_photo);
+            Settings.burst_photo.Values.Add(CurrentValues.burst_photo);
+            Settings.autoshoot_photo.Values.Add(CurrentValues.autoshoot_photo);
+            
         }
 
         /// <summary>
@@ -86,7 +95,7 @@ namespace SJ5000Plus.ViewModels
                 CBox.SelectedItem = null;
 
                 //Get the Values
-                CamGetParamValuesMessage Param = await _camService.GetParamValues(CBox.Name);
+                CamGetParamValuesMessage Param = await (App.Current as App).Camera.GetParamValues(CBox.Name);
 
                 // Get the Param and update its values with reflexion
                 Models.Param parameter = (Models.Param)GetPropertyValue(CBox.Name);
@@ -112,7 +121,7 @@ namespace SJ5000Plus.ViewModels
         private async void DropDownSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox CBox = sender as ComboBox;
-            await _camService.SetParamValue(CBox.Name, CBox.SelectedItem.ToString());
+            //await _camService.SetParamValue(CBox.Name, CBox.SelectedItem.ToString());
         }
 
         /// <summary>
@@ -126,6 +135,5 @@ namespace SJ5000Plus.ViewModels
             }
             catch { return null; }
         }
-
     }
 }
