@@ -16,7 +16,7 @@ namespace SJ5000Plus.Services.CameraServices
         Task<bool> Disconnect();
         Task<bool> Connect();
         Task<bool> GetToken();
-        Task<bool> TakePhoto();
+        Task<string> TakePhoto();
         Task<bool> StartVideo();
         Task<bool> StopVideo();
     }

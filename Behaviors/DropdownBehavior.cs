@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Input;
 
-namespace SJ5000.Behaviors
+namespace SJ5000Plus.Behaviors
 {
 
     /// <summary>

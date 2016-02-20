@@ -90,7 +90,7 @@ namespace SJ5000Plus.Services.CameraServices
             throw new NotImplementedException();
         }
 
-        public Task<bool> TakePhoto()
+        public Task<string> TakePhoto()
         {
             throw new NotImplementedException();
         }

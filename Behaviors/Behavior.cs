@@ -2,7 +2,7 @@
 using System;
 using Windows.UI.Xaml;
 
-namespace SJ5000.Behaviors
+namespace SJ5000Plus.Behaviors
 {
 
     public abstract class Behavior<T> : DependencyObject, IBehavior where T : DependencyObject

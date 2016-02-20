@@ -255,19 +255,84 @@ namespace SJ5000Plus.Services.CameraServices
             return false;
         }
 
-        public Task<bool> TakePhoto()
+        public async Task<string> TakePhoto()
         {
-            throw new NotImplementedException();
+            // Take Photo
+            // ->{"msg_id":769,"token":1}
+            // <-{"rval":0,"msg_id":769}
+            // <-{ "msg_id": 7, "type": "start_photo_capture" }
+            // <-{ "msg_id": 7, "type": "photo_taken" ,"param":"/tmp/fuse_d/DCIM/100MEDIA/SJCM0004.jpg"}
+            // <-{ "msg_id": 7, "type": "photo_taken" ,"param":"/tmp/fuse_d/DCIM/100MEDIA/SJCM0004.jpg"}
+
+            UserTakePhotoMessage UsrMsg = new UserTakePhotoMessage(_token);
+            UserTakePhotoMessageCodec UsrMsgCodec = new UserTakePhotoMessageCodec();
+            // Send the message
+            if (await Send(await UsrMsgCodec.Encode(UsrMsg)))
+            {
+                // If sent, get the first response message
+                string MsgReceived = await _CameraSocket.Receive();
+                CameraMessageCodec CamEchoCodec = new CameraMessageCodec();
+                CameraMessage CamEchoMsg = await CamEchoCodec.Decode(MsgReceived);
+
+                if (CamEchoMsg.msg_id != UsrMsg.msg_id)
+                {
+                    return null;
+                }
+
+                //Receive the start_photo_capture message   
+                MsgReceived = null;
+                MsgReceived = await _CameraSocket.Receive();            
+                CamStartCaptureMessageCodec CamCodec = new CamStartCaptureMessageCodec();
+                CamStartCaptureMessage CamMsg = await CamCodec.Decode(MsgReceived);
+
+                // Check if photo capture is started
+                if (CamMsg.msg_id != CamStartCaptureMessage.msg_id_expected && !CamMsg.type.Equals(CamStartCaptureMessage.photo_expected))
+                {
+                    return null;
+                }
+
+                //Receive the Photo name
+                MsgReceived = null;
+                MsgReceived = await _CameraSocket.Receive();
+                CamCaptureDoneMessageCodec CptrDoneCodec = new CamCaptureDoneMessageCodec();
+                CamCaptureDoneMessage CptrDoneMsg = await CptrDoneCodec.Decode(MsgReceived);
+
+                // Check if msg_id and type are the expected
+                if (CptrDoneMsg.msg_id != CamCaptureDoneMessage.msg_id_expected && !CptrDoneMsg.type.Equals(CamCaptureDoneMessage.photo_expected))
+                {
+                    return null;
+                }
+
+                // Return the location of the taken photo
+                ///tmp/fuse_d/DCIM/100MEDIA/SJCM0004.jpg
+                string[] directories = CptrDoneMsg.param.Split('/');
+                string photoLocation = string.Empty;
+                for (int i = 2; i < directories.Length; i++)
+                {
+                    photoLocation += directories[i];
+                }
+                return photoLocation;
+            }
+            // If there is a problem
+            return null;
         }
 
-        public Task<bool> StartVideo()
+        public async Task<bool> StartVideo()
         {
-            throw new NotImplementedException();
+            // Start Recording
+            // ->{"msg_id":513,"token":1}
+            // <-{"rval":0,"msg_id":513 }
+            // <-{ "msg_id": 7, "type": "start_video_record" }
+            return true;
         }
 
-        public Task<bool> StopVideo()
+        public async Task<bool> StopVideo()
         {
-            throw new NotImplementedException();
+            // Stop recording
+            // ->{"msg_id":514,"token":1}
+            // <-{"rval":0,"msg_id":514,"param":"/tmp/fuse_d/DCIM/100MEDIA/SJCM0003.mp4"}
+            // <-{ "msg_id": 7, "type": "video_record_complete" ,"param":"/tmp/fuse_d/DCIM/100MEDIA/SJCM0003.mp4"}
+            return true;
         }
     }
 }
