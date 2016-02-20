@@ -99,7 +99,6 @@
     </Compile>
     <Compile Include="Behaviors\Behavior.cs" />
     <Compile Include="Behaviors\DropdownBehavior.cs" />
-    <Compile Include="Camera.cs" />
     <Compile Include="Globals.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Models\Camera.cs" />

@@ -24,9 +24,7 @@ namespace SJ5000Plus.Views
     /// </summary>
     public sealed partial class CamSettingsPage : Page
     {
-        private Camera _Camera = null;
         private Helpers _Helper;
-        private bool _isConnected = false;
         public CamSettingsPage()
         {
             this.InitializeComponent();
@@ -37,6 +35,10 @@ namespace SJ5000Plus.Views
         
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
+            if (e.Parameter != null)
+            {
+                ViewModel.Camera = e.Parameter as Services.CameraServices.CameraService;
+            }
             //var index = Template10.Services.SerializationService.SerializationService
             //    .Json.Deserialize<int>(e.Parameter?.ToString());
             //MyPivot.SelectedIndex = index;

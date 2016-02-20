@@ -56,10 +56,10 @@ namespace SJ5000Plus.Services.CameraServices
             return Param;
         }
 
-        public Task SetParamValue(string Param, string Value)
+        public async Task<bool> SetParamValue(string Param, string Value, string Permission)
         {
             Vocabulary.Messages.CamParamMessage Msg = new Vocabulary.Messages.CamParamMessage(9, 0, Value);
-            return Task.CompletedTask;
+            return true;
         }
     }
 }

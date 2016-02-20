@@ -64,8 +64,8 @@
             <TextBlock HorizontalAlignment="Center" Text="{Binding ConnectionStatus}"></TextBlock>
             <TextBlock HorizontalAlignment="Center" Text="{Binding Token}"></TextBlock>
             <Button Margin="0,10,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Center"
-                    Click="{x:Bind ViewModel.Connect}" Content="Conectar" />
-
+                    Command="{Binding MyButtonClickCommand}" IsEnabled="{Binding ButtonEnabled}" Content="{Binding ButtonText}" />
+            <ProgressRing IsActive="{Binding ProgressVisibility}"/>
         </StackPanel>
     </Grid>
 </Page>

@@ -58,6 +58,18 @@ namespace SJ5000Plus.Services.CameraServices
         }
 
         /// <summary>
+        /// Disconnect the Socket. Will return true if successful
+        /// </summary>
+        public async Task<bool> Disconnect()
+        {
+            _connected = !(await _CameraSocket.Disconnect());
+            if (!_connected)
+                return true;
+            else
+                return false;
+        }
+
+        /// <summary>
         /// Get a new Token and if successfull assigns it to the Token property
         /// </summary>
         public async Task<bool> GetToken()
@@ -166,11 +178,80 @@ namespace SJ5000Plus.Services.CameraServices
         }
 
         /// <summary>
+        /// Request permission to set value of params. Returns true if permission granted
+        /// </summary>
+        private async Task<bool> RequestPermission()
+        {
+            // Create the message
+            UserRequestEditParamMessage UserMsg = new UserRequestEditParamMessage(_token);
+
+            // Get the codec
+            UserRequestEditParamMessageCodec UserMsgCodec = new UserRequestEditParamMessageCodec();
+
+            // Send the message
+            if (await Send(await UserMsgCodec.Encode(UserMsg)))
+            {
+                // If sent get the response
+                string MsgReceived = await _CameraSocket.Receive();
+
+                // Get the codec
+                CameraMessageCodec CamMsgCodec = new CameraMessageCodec();
+
+                // Decode the string
+                CameraMessage CamMsg = await CamMsgCodec.Decode(MsgReceived);
+
+                if (CamMsg.rval != 0 || CamMsg.msg_id != UserMsg.msg_id)
+                {
+                    return false;
+                }
+                return true;
+            }
+            // Couldn't send
+            return false;
+        }
+
+        /// <summary>
         /// Set the value of a parameter
         /// </summary>
-        public Task SetParamValue(string name, string selectedItem)
+        public async Task<bool> SetParamValue(string param, string value, string permission)
         {
-            return Task.CompletedTask;
+            // If not settable request permission
+            if (!permission.Equals("settable"))
+            {
+                // If permission not granted/error return null
+                if (!await RequestPermission())
+                {
+                    return false;
+                }
+            }
+            // If everything ok continue
+
+            // Create the message
+            UserSetParamMessage UserMsg = new UserSetParamMessage(_token, param, value);
+
+            // Get the codec
+            UserSetParamMessageCodec UsrMsgCodec = new UserSetParamMessageCodec();
+
+            // Send the message
+            if (await Send(await UsrMsgCodec.Encode(UserMsg)))
+            {
+                // If sent, get the response
+                string MsgReceived = await _CameraSocket.Receive();
+
+                // Get the codec
+                CamParamMessageCodec CamMsgCodec = new CamParamMessageCodec();
+
+                // Decode the string
+                CamParamMessage CamMsg = await CamMsgCodec.Decode(MsgReceived);
+
+                if (CamMsg.rval != 0 || CamMsg.msg_id != UserMsg.msg_id)
+                {
+                    return false;
+                }
+                return true;
+            }
+            // If there is a problem
+            return false;
         }
     }
 }

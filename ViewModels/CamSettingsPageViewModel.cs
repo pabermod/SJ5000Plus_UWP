@@ -18,8 +18,9 @@ namespace SJ5000Plus.ViewModels
 {
     public class CamSettingsPageViewModel : ViewModelBase
     {
-        private ICameraService _camService;
+        public ICameraService Camera;
         public Models.Settings Settings { get; set; }
+
 
         /// <summary>
         /// ViewModel Constructor. Initializes the camera service, the lists and populates them.
@@ -35,7 +36,7 @@ namespace SJ5000Plus.ViewModels
         {           
             if (parameter != null)
             {
-                _camService = parameter as CameraService;
+                Camera = parameter as CameraService;
             }
             await PopulateAllSettings();
         }
@@ -98,7 +99,7 @@ namespace SJ5000Plus.ViewModels
                 CamGetParamValuesMessage Param = await (App.Current as App).Camera.GetParamValues(CBox.Name);
 
                 // Get the Param and update its values with reflexion
-                Models.Param parameter = (Models.Param)GetPropertyValue(CBox.Name);
+                Models.Param parameter = (Models.Param)GetParamByName(CBox.Name);
 
                 foreach (var item in Param.options)
                 {
@@ -121,13 +122,14 @@ namespace SJ5000Plus.ViewModels
         private async void DropDownSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             ComboBox CBox = sender as ComboBox;
-            //await _camService.SetParamValue(CBox.Name, CBox.SelectedItem.ToString());
+            Models.Param parameter = (Models.Param)GetParamByName(CBox.Name);
+            await Camera.SetParamValue(CBox.Name, CBox.SelectedItem.ToString(), parameter.permission);
         }
 
         /// <summary>
-        /// Returns the value of the property of Settings
+        /// Returns the specified Param object by its name (from a Settings object)
         /// </summary>
-        private object GetPropertyValue(string propertyName)
+        private object GetParamByName(string propertyName)
         {
             try
             {
