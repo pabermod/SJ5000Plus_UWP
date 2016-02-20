@@ -67,7 +67,8 @@
                                   Header="Video Resolution"
                                   ItemsSource="{Binding Settings.video_resolution.Values, Mode=TwoWay}"
                                   SelectedItem="{Binding Settings.video_resolution.currentValue, Mode=TwoWay}"
-                                  DropDownOpened="DropDownOpened"/>
+                                  DropDownOpened="DropDownOpened"
+                                  />
                         <ComboBox Name="video_quality" 
                                   Header="Video Quality"
                                   ItemsSource="{Binding Settings.video_quality.Values, Mode=TwoWay}"

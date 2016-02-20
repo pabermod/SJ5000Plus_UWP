@@ -27,18 +27,19 @@ namespace SJ5000Plus.ViewModels
         /// </summary>
         public CamSettingsPageViewModel()
         {
-            //_camService = new FakeCameraService();
             Settings = new Models.Settings();
-            //PopulateAllSettings();
         }
 
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
-        {           
-            if (parameter != null)
-            {
-                Camera = parameter as CameraService;
-            }
+        {
+            Camera = (App.Current as App).Camera;
             await PopulateAllSettings();
+        }
+
+        public override Task OnNavigatedFromAsync(IDictionary<string, object> state, bool suspending)
+        {
+            (App.Current as App).Camera = Camera as CameraService;
+            return Task.CompletedTask;
         }
 
         /// <summary>
@@ -71,7 +72,6 @@ namespace SJ5000Plus.ViewModels
             Settings.selfie_photo.currentValue = CurrentValues.selfie_photo;
             Settings.burst_photo.currentValue = CurrentValues.burst_photo;
             Settings.autoshoot_photo.currentValue = CurrentValues.autoshoot_photo;
-
 
             Settings.photo_size.Values.Add(CurrentValues.photo_size);
             Settings.photo_stamp.Values.Add(CurrentValues.photo_stamp);

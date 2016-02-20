@@ -19,6 +19,7 @@ namespace SJ5000Plus.Services.CameraServices
         public int token
         {
             get { return _token; }
+            set { _token = value; }
         }
 
         public CameraService(IPAddress CameraIP, int Port)
@@ -252,6 +253,21 @@ namespace SJ5000Plus.Services.CameraServices
             }
             // If there is a problem
             return false;
+        }
+
+        public Task<bool> TakePhoto()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> StartVideo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> StopVideo()
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -6,6 +6,18 @@ namespace SJ5000Plus.Services.CameraServices
 {
     public class FakeCameraService : ICameraService
     {
+        public int token { get; set; }
+
+        public async Task<bool> Connect()
+        {
+            return true;
+        }
+
+        public async Task<bool> Disconnect()
+        {
+            return true;
+        }
+
         public async Task<Vocabulary.Settings> GetCurrentValues()
         {
             Vocabulary.Settings sett = new Vocabulary.Settings();
@@ -56,10 +68,31 @@ namespace SJ5000Plus.Services.CameraServices
             return Param;
         }
 
+        public async Task<bool> GetToken()
+        {
+            token = new Random().Next(1, 20);
+            return true;
+        }
+
         public async Task<bool> SetParamValue(string Param, string Value, string Permission)
         {
             Vocabulary.Messages.CamParamMessage Msg = new Vocabulary.Messages.CamParamMessage(9, 0, Value);
             return true;
+        }
+
+        public Task<bool> StartVideo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> StopVideo()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<bool> TakePhoto()
+        {
+            throw new NotImplementedException();
         }
     }
 }

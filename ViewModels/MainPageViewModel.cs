@@ -12,7 +12,7 @@ namespace SJ5000Plus.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        public CameraService Camera = null;
+        private ICameraService Camera;
         string _ButtonText = string.Empty;
         public string ButtonText { get { return _ButtonText; } set { Set(ref _ButtonText, value); } }
 
@@ -60,15 +60,8 @@ namespace SJ5000Plus.ViewModels
         }
 
         public override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
-        {        
-            if (parameter != null)
-            {
-                Camera = parameter as CameraService;
-            }
-            else if (Camera == null)
-            {
-                Camera = new CameraService(Globals.CameraIP, Globals.CameraPort);
-            }
+        {
+            Camera = (App.Current as App).Camera;
             if (state.Any())
             {
                 ButtonText = state[nameof(ButtonText)]?.ToString();
@@ -79,6 +72,7 @@ namespace SJ5000Plus.ViewModels
 
         public override Task OnNavigatedFromAsync(IDictionary<string, object> state, bool suspending)
         {
+            (App.Current as App).Camera = Camera as CameraService;
             if (suspending)
             {
                 state[nameof(ButtonText)] = ButtonText;
@@ -89,7 +83,6 @@ namespace SJ5000Plus.ViewModels
         public override Task OnNavigatingFromAsync(NavigatingEventArgs args)
         {
             args.Cancel = false;
-            args.Parameter = Camera;
             return Task.CompletedTask;
         }
 
