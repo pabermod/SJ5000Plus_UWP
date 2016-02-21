@@ -1,4 +1,4 @@
-﻿<Page x:Class="SJ5000PlusPlus.Views.CamSettingsPage"
+﻿<Page x:Class="SJ5000Plus.Views.CamSettingsPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:Behaviors="using:Template10.Behaviors"

@@ -46,10 +46,19 @@ namespace SJ5000Plus.ViewModels
             set { Set(ref _ButtonEnabled, value); }
         }
 
+        private bool _CameraButtonsEnabled;
+
+        public bool CameraButtonsEnabled
+        {
+            get { return _CameraButtonsEnabled; }
+            set { Set(ref _CameraButtonsEnabled, value); }
+        }
+
         public MainPageViewModel()
         {
             ButtonEnabled = true;
             ProgressVisibility = false;
+            CameraButtonsEnabled = false;
             ButtonText = "Conectar";
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
@@ -109,10 +118,10 @@ namespace SJ5000Plus.ViewModels
             {
                 if (await Camera.Disconnect())
                 {
-                    ConnectionStatus = "Desconectado";
                     Globals.SetIsConnected(false);
                     ConnectionStatus = "Desconectado";
                     ButtonText = "Conectar";
+                    CameraButtonsEnabled = false;
                 }
             }
             else
@@ -124,11 +133,36 @@ namespace SJ5000Plus.ViewModels
                     Globals.SetIsConnected(true);
                     ConnectionStatus = "Conectado";
                     ButtonText = "Desconectar";
+                    CameraButtonsEnabled = true;
                 }
             }
             ProgressVisibility = false;
             ButtonEnabled = true;
         }
+
+        public ICommand PhotoButtonClickCommand
+        {
+            get { return new DelegateCommand<object>(PhotoButtonClick, CanExecutePhotoClick); }
+        }
+
+        private bool CanExecutePhotoClick(object context)
+        {
+            //this is called to evaluate whether PhotoButtonClick can be called
+            return true;
+        }
+
+        private async void PhotoButtonClick(object context)
+        {
+            ButtonEnabled = false;
+            CameraButtonsEnabled = false;
+            ProgressVisibility = true;
+            string photo_location = await Camera.TakePhoto();
+            ProgressVisibility = false;
+            ConnectionStatus = photo_location;
+            CameraButtonsEnabled = true;
+            ButtonEnabled = true;
+        }
+
 
         public void GotoDetailsPage() =>
             NavigationService.Navigate(typeof(Views.DetailPage), ButtonText);

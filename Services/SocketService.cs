@@ -16,7 +16,8 @@ namespace SJ5000Plus.Services
     public class SocketService
     {
         // Timeout of reception
-        const int RECV_TIMEOUT = 1000;
+        const int RECV_TIMEOUT = 250;
+
         const uint _OutboundBufferSize = 512;
         const int _InboundBufferSize = 4096;
 
@@ -108,7 +109,7 @@ namespace SJ5000Plus.Services
             // set the DataReader to only wait for available data
             _reader.InputStreamOptions = InputStreamOptions.Partial;
 
-            // wait for the available data up to 512 bytes
+            // wait for the available data up to _InboundBufferSize bytes
             // count is the number of actually received bytes
             var count = await _reader.LoadAsync(_InboundBufferSize);
 

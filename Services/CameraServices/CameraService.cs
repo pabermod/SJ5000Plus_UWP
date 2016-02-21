@@ -303,13 +303,25 @@ namespace SJ5000Plus.Services.CameraServices
                     return null;
                 }
 
+                //Receive the Photo name again
+                MsgReceived = null;
+                MsgReceived = await _CameraSocket.Receive();
+                CptrDoneCodec = new CamCaptureDoneMessageCodec();
+                CptrDoneMsg = await CptrDoneCodec.Decode(MsgReceived);
+
+                // Check if msg_id and type are the expected
+                if (CptrDoneMsg.msg_id != CamCaptureDoneMessage.msg_id_expected && !CptrDoneMsg.type.Equals(CamCaptureDoneMessage.photo_expected))
+                {
+                    return null;
+                }
+
                 // Return the location of the taken photo
                 ///tmp/fuse_d/DCIM/100MEDIA/SJCM0004.jpg
                 string[] directories = CptrDoneMsg.param.Split('/');
                 string photoLocation = string.Empty;
-                for (int i = 2; i < directories.Length; i++)
+                for (int i = 3; i < directories.Length; i++)
                 {
-                    photoLocation += directories[i];
+                    photoLocation += "/" + directories[i];
                 }
                 return photoLocation;
             }

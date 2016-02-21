@@ -27,7 +27,7 @@ namespace SJ5000Plus.Views
         //private Helpers _Helper;
         public CamSettingsPage()
         {
-            this.InitializeComponent();
+            InitializeComponent();
 
             //_Helper = new Helpers();
         }
