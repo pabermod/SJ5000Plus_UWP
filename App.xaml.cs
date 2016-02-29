@@ -1,9 +1,10 @@
-using System;
 using Windows.UI.Xaml;
 using System.Threading.Tasks;
 using SJ5000Plus.Services.SettingsServices;
-using SJ5000Plus.Services.CameraServices;
 using Windows.ApplicationModel.Activation;
+using Template10.Controls;
+using Template10.Common;
+using SJ5000Plus.Services.CameraServices;
 
 namespace SJ5000Plus
 {
@@ -16,6 +17,9 @@ namespace SJ5000Plus
 
         public App()
         {
+            Microsoft.ApplicationInsights.WindowsAppInitializer.InitializeAsync(
+                Microsoft.ApplicationInsights.WindowsCollectors.Metadata |
+                Microsoft.ApplicationInsights.WindowsCollectors.Session);
             InitializeComponent();
             SplashFactory = (e) => new Views.Splash(e);
 
@@ -34,11 +38,16 @@ namespace SJ5000Plus
         public override Task OnInitializeAsync(IActivatedEventArgs args)
         {
             // content may already be shell when resuming
-            if ((Window.Current.Content as Views.Shell) == null)
+            if ((Window.Current.Content as ModalDialog) == null)
             {
-                // setup hamburger shell
+                // setup hamburger shell inside a modal dialog
                 var nav = NavigationServiceFactory(BackButton.Attach, ExistingContent.Include);
-                Window.Current.Content = new Views.Shell(nav);
+                Window.Current.Content = new ModalDialog
+                {
+                    DisableBackButtonWhenModal = true,
+                    Content = new Views.Shell(nav),
+                    ModalContent = new Views.Busy(),
+                };
             }
             return Task.CompletedTask;
         }

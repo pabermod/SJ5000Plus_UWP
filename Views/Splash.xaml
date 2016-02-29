@@ -19,17 +19,16 @@
                     </ImageBrush.Transform>
                 </ImageBrush>
             </Canvas.Background>
-            <Viewbox x:Name="MyImage"
-                     Width="{Binding ActualWidth, ElementName=MyCanvas, Mode=OneWay}"
-                     Height="{Binding ActualHeight, ElementName=MyCanvas, Mode=OneWay}">
+            <Viewbox x:Name="MyImage" Width="{Binding ActualWidth, ElementName=MyCanvas, Mode=OneWay}" Height="{Binding ActualHeight, ElementName=MyCanvas, Mode=OneWay}">
                 <Image Source="ms-appx:///Assets/SplashScreen.png" />
             </Viewbox>
         </Canvas>
 
-        <ProgressRing x:Name="progressRing" Width="50" Height="50"
-                      HorizontalAlignment="Center" VerticalAlignment="Center"
-                      Foreground="{StaticResource ExtendedSplashForeground}" IsActive="True"
-                      RenderTransformOrigin="0.5,0.5">
+        <ProgressRing x:Name="progressRing" Width="50"
+                      Height="50" HorizontalAlignment="Center"
+                      VerticalAlignment="Center"
+                      Foreground="{StaticResource ExtendedSplashForeground}"
+                      IsActive="True" RenderTransformOrigin="0.5,0.5">
             <ProgressRing.RenderTransform>
                 <CompositeTransform x:Name="ProgressTransform" TranslateY="120" />
             </ProgressRing.RenderTransform>

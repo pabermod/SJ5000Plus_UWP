@@ -46,7 +46,8 @@ namespace SJ5000Plus.Services.SettingsServices
             set
             {
                 _helper.Write(nameof(AppTheme), value.ToString());
-                BootStrapper.Current.NavigationService.Frame.RequestedTheme = value.ToElementTheme();
+                (Window.Current.Content as FrameworkElement).RequestedTheme = value.ToElementTheme();
+                Views.Shell.HamburgerMenu.RefreshStyles(value);
             }
         }
 
