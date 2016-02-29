@@ -39,8 +39,7 @@ namespace SJ5000Plus
         }
 
         /// <summary>
-        /// Returns true if is connected to the camera, asuming that if the Wifi Connection
-        /// is only local access, it will be connected.
+        /// Returns true if the current connection is wifi
         /// </summary>
         public async Task<bool> CheckWiFi()
         {
