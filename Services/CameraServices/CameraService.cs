@@ -335,7 +335,39 @@ namespace SJ5000Plus.Services.CameraServices
             // ->{"msg_id":513,"token":1}
             // <-{"rval":0,"msg_id":513 }
             // <-{ "msg_id": 7, "type": "start_video_record" }
-            return true;
+
+            UserStartVideoMessage UsrMsg = new UserStartVideoMessage(_token);
+
+            UserStartVideoMessageCodec UsrMsgCodec = new UserStartVideoMessageCodec();
+            // Send the message
+            if (await Send(await UsrMsgCodec.Encode(UsrMsg)))
+            {
+                // If sent, get the first response message
+                string MsgReceived = await _CameraSocket.Receive();
+                CameraMessageCodec CamEchoCodec = new CameraMessageCodec();
+                CameraMessage CamEchoMsg = await CamEchoCodec.Decode(MsgReceived);
+
+                if (CamEchoMsg.msg_id != UsrMsg.msg_id)
+                {
+                    return false;
+                }
+
+                //Receive the start_video message   
+                MsgReceived = null;
+                MsgReceived = await _CameraSocket.Receive();
+                CamStartCaptureMessageCodec CamCodec = new CamStartCaptureMessageCodec();
+                CamStartCaptureMessage CamMsg = await CamCodec.Decode(MsgReceived);
+
+                // Check if photo capture is started
+                if (CamMsg.msg_id != CamStartCaptureMessage.msg_id_expected && !CamMsg.type.Equals(CamStartCaptureMessage.video_expected))
+                {
+                    return false;
+                }
+                // If everything OK, return true
+                return true;
+            }
+            return false;
+           
         }
 
         public async Task<bool> StopVideo()

@@ -18,33 +18,16 @@ namespace SJ5000Plus.Views
         {
             Instance = this;
             InitializeComponent();
-            Loaded += Shell_Loaded;
         }
 
-        private void Shell_Loaded(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        public Shell(INavigationService navigationService) : this()
         {
-            SettingsButton.IsEnabled = false;
-        }
-
-        public Shell(INavigationService navigationService)
-        {
-            Instance = this;
-            InitializeComponent();
             SetNavigationService(navigationService);
         }
 
         public void SetNavigationService(INavigationService navigationService)
         {
             MyHamburgerMenu.NavigationService = navigationService;
-        }
-
-        public static void SetBusy(bool busy, string text = null)
-        {
-            WindowWrapper.Current().Dispatcher.Dispatch(() =>
-            {
-                Instance.BusyView.BusyText = text;
-                Instance.ModalContainer.IsModal = Instance.BusyView.IsBusy = busy;
-            });
         }
     }
 }

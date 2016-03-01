@@ -68,24 +68,15 @@ namespace SJ5000Plus.ViewModels
             }
         }
 
-        public override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> state)
+        public override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
             Camera = (App.Current as App).Camera;
-            if (state.Any())
-            {
-                ButtonText = state[nameof(ButtonText)]?.ToString();
-                state.Clear();
-            }
             return Task.CompletedTask;
         }
 
-        public override Task OnNavigatedFromAsync(IDictionary<string, object> state, bool suspending)
+        public override Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
             (App.Current as App).Camera = Camera as CameraService;
-            if (suspending)
-            {
-                state[nameof(ButtonText)] = ButtonText;
-            }
             return Task.CompletedTask;
         }
 
