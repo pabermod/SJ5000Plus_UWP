@@ -70,6 +70,7 @@ namespace SJ5000Plus.ViewModels
 
         public override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
+            Views.Shell.HamburgerMenu.IsFullScreen = true;
             Camera = (App.Current as App).Camera;
             return Task.CompletedTask;
         }
