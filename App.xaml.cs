@@ -56,7 +56,7 @@ namespace SJ5000Plus
         public override Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
             Camera = new CameraService(Globals.CameraIP, Globals.CameraPort);
-            NavigationService.Navigate(typeof(Views.MainPage));
+            NavigationService.Navigate(typeof(Views.ConnectPage));
             return Task.CompletedTask;
         }
     }
