@@ -64,9 +64,6 @@
         <StackPanel Grid.Row="1" VerticalAlignment="Top"
                     Padding="0,10,0,0">
             <TextBlock HorizontalAlignment="Center" Text="{Binding ConnectionStatus}"></TextBlock>
-            <TextBlock HorizontalAlignment="Center" Text="{Binding Token}"></TextBlock>
-            <Button Margin="0,10,0,0" VerticalAlignment="Bottom" HorizontalAlignment="Center"
-                    Command="{Binding MyButtonClickCommand}" IsEnabled="{Binding ButtonEnabled}" Content="{Binding ButtonText}" />
             <ProgressRing Margin="0,20,0,0" IsActive="{Binding ProgressVisibility}"/>
         </StackPanel>
         <StackPanel Grid.Row="2">

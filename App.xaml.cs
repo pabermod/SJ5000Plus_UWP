@@ -13,7 +13,7 @@ namespace SJ5000Plus
 
     sealed partial class App : Template10.Common.BootStrapper
     {
-        public CameraService Camera;
+        public ICameraService Camera;
 
         public App()
         {
@@ -56,7 +56,8 @@ namespace SJ5000Plus
         public override Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
             Camera = new CameraService(Globals.CameraIP, Globals.CameraPort);
-            NavigationService.Navigate(typeof(Views.MainPage));
+            //Camera = new FakeCameraService();
+            NavigationService.Navigate(typeof(Views.ConnectPage));
             return Task.CompletedTask;
         }
     }
