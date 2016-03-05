@@ -1,72 +1,105 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Template10.Mvvm;
-
-namespace SJ5000Plus.Models
+﻿namespace SJ5000Plus.Models
 {
     public class Settings
     {
-        public Param camera_clock { get; set; }
-        public Param video_standard { get; set; }
-        public Param app_status { get; set; }
-        public Param stream_out_type { get; set; }
-        public Param save_low_resolution_clip { get; set; }
-        public Param video_resolution{ get; set; }
-        public Param video_stamp { get; set; }
-        public Param video_quality { get; set; }
-        public Param timelapse_video { get; set; }
-        public Param photo_size { get; set; }
-        public Param photo_stamp { get; set; }
-        public Param photo_quality { get; set; }
-        public Param timelapse_photo { get; set; }
-        public Param selfie_photo { get; set; }
-        public Param burst_photo { get; set; }
-        public Param autoshoot_photo { get; set; }
-        public Param loop_record { get; set; }
-        public Param motion_detec_video { get; set; }
-        public Param status_led_switch { get; set; }
-        public Param wifi_led_switch { get; set; }
-        public Param osd_switch { get; set; }
-        public Param cardvr_switch { get; set; }
-        public Param delay_pwroff { get; set; }
-        public Param rotate_image { get; set; }
-        public Param mic_vol { get; set; }
-        public Param language { get; set; }
-        public Param date_disp_fmt { get; set; }
-        public Param auto_bkl_off { get; set; }
-        public Param auto_pwr_off { get; set; }
-        public Param light_freq { get; set; }
-        public Param meter_mode { get; set; }
-        public Param buzzer { get; set; }    
         public Settings()
         {
-            video_resolution = new Param();
-            video_quality = new Param();
-            video_standard = new Param();
-            video_stamp = new Param();
-            timelapse_video = new Param();
-            loop_record = new Param();
-            motion_detec_video = new Param();
-            photo_size = new Param();
-            photo_stamp = new Param();
-            photo_quality = new Param();
-            timelapse_photo = new Param();
-            selfie_photo = new Param();
-            burst_photo = new Param();
-            autoshoot_photo = new Param();
-            status_led_switch = new Param();
-            delay_pwroff = new Param();
-            rotate_image = new Param();
-            mic_vol = new Param();
-            language = new Param();
-            date_disp_fmt = new Param();
+            //app_status = new Param();
             auto_bkl_off = new Param();
             auto_pwr_off = new Param();
+            autoshoot_photo = new Param();
+            burst_photo = new Param();
+            buzzer = new Param();
+            //camera_clock = new Param();
+            cardvr_switch = new Param();
+            date_disp_fmt = new Param();
+            delay_pwroff = new Param();
+            language = new Param();
             light_freq = new Param();
+            loop_record = new Param();
             meter_mode = new Param();
+            mic_vol = new Param();
+            motion_detec_video = new Param();
+            photo_quality = new Param();
+            photo_size = new Param();
+            photo_stamp = new Param();
+            rotate_image = new Param();
+            save_low_resolution_clip = new Param();
+            selfie_photo = new Param();
+            status_led_switch = new Param();
+            //stream_out_type = new Param();
+            timelapse_photo = new Param();
+            timelapse_video = new Param();
+            video_quality = new Param();
+            video_resolution = new Param();
+            video_stamp = new Param();
+            video_standard = new Param();
+            wifi_led_switch = new Param();
+        }
+
+        public Param app_status { get; set; }
+        public Param auto_bkl_off { get; set; }
+        public Param auto_pwr_off { get; set; }
+        public Param autoshoot_photo { get; set; }
+        public Param burst_photo { get; set; }
+        public Param buzzer { get; set; }
+        public Param camera_clock { get; set; }
+        public Param cardvr_switch { get; set; }
+        public Param date_disp_fmt { get; set; }
+        public Param delay_pwroff { get; set; }
+        public Param language { get; set; }
+        public Param light_freq { get; set; }
+        public Param loop_record { get; set; }
+        public Param meter_mode { get; set; }
+        public Param mic_vol { get; set; }
+        public Param motion_detec_video { get; set; }
+        public Param osd_switch { get; set; }
+        public Param photo_quality { get; set; }
+        public Param photo_size { get; set; }
+        public Param photo_stamp { get; set; }
+        public Param rotate_image { get; set; }
+        public Param save_low_resolution_clip { get; set; }
+        public Param selfie_photo { get; set; }
+        public Param status_led_switch { get; set; }
+        public Param stream_out_type { get; set; }
+        public Param timelapse_photo { get; set; }
+        public Param timelapse_video { get; set; }
+        public Param video_quality { get; set; }
+        public Param video_resolution { get; set; }
+        public Param video_stamp { get; set; }
+        public Param video_standard { get; set; }
+        public Param wifi_led_switch { get; set; }
+
+        /// <summary>
+        /// Add or update a Param with the specified value
+        /// </summary>
+        /// <param name="param">Param to be updated</param>
+        /// <param name="value">Value to be updated into the Param</param>
+        /// <returns></returns>
+        public static Param AddOrUpdate(Param param, string value)
+        {
+            if (param == null)
+            {
+                return null;
+            } 
+            if (param.Values.Count == 0)
+            {
+                param.Values.Add(value);
+                param.currentValue = value;
+            }
+            else if (param.Values.Count == 1)
+            {
+                param.Values.Remove(param.currentValue);
+                param.Values.Add(value);
+                param.currentValue = value;
+            }
+            else if (param.currentValue != value)
+            {
+                // More than 1 value. Suppose the Collection is filled with
+                // all the possible values
+                param.currentValue = value;
+            }
+            return param;
         }
     }
 }

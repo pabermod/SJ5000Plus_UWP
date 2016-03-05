@@ -28,7 +28,7 @@ namespace SJ5000Plus.Views
         public CamSettingsPage()
         {
             InitializeComponent();
-
+            NavigationCacheMode = NavigationCacheMode.Enabled;
             //_Helper = new Helpers();
         }
 
@@ -43,7 +43,7 @@ namespace SJ5000Plus.Views
 
         private async void DropDownOpened(object sender, object e)
         {
-            //ViewModel.PopulateValues(sender as ComboBox);
+            ViewModel.PopulateValues(sender as ComboBox);
         }
 
         private async void Page_Loaded(object sender, RoutedEventArgs e)

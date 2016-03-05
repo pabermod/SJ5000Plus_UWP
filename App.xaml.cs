@@ -5,6 +5,8 @@ using Windows.ApplicationModel.Activation;
 using Template10.Controls;
 using Template10.Common;
 using SJ5000Plus.Services.CameraServices;
+using Windows.Foundation;
+using System;
 
 namespace SJ5000Plus
 {
@@ -55,8 +57,16 @@ namespace SJ5000Plus
         // runs only when not restored from state
         public override Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
-            Camera = new CameraService(Globals.CameraIP, Globals.CameraPort);
-            //Camera = new FakeCameraService();
+            // hide phone statusbar
+            if (Windows.Foundation.Metadata.ApiInformation
+                .IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
+            {
+                //await Windows.UI.ViewManagement.StatusBar.GetForCurrentView().HideAsync();
+                Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundOpacity = 1;
+            }
+
+            //Camera = new CameraService(Globals.CameraIP, Globals.CameraPort);
+            Camera = new FakeCameraService();
             NavigationService.Navigate(typeof(Views.ConnectPage));
             return Task.CompletedTask;
         }

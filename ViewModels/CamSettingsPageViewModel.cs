@@ -38,7 +38,7 @@ namespace SJ5000Plus.ViewModels
 
         public override Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
-            (App.Current as App).Camera = Camera as CameraService;
+            (App.Current as App).Camera = Camera;
             return Task.CompletedTask;
         }
 
@@ -48,38 +48,39 @@ namespace SJ5000Plus.ViewModels
         private async Task PopulateAllSettings()
         {
             // Get the current values
-            Vocabulary.Settings CurrentValues = await (App.Current as App).Camera.GetCurrentValues();
+            Vocabulary.Settings CurrentValues = await Camera.GetCurrentValues();
 
             // Populate the current value and the lists
-            Settings.video_resolution.Values.Add(CurrentValues.video_resolution);
-            Settings.video_standard.Values.Add(CurrentValues.video_standard);
-            Settings.video_quality.Values.Add(CurrentValues.video_quality);
-            Settings.video_stamp.Values.Add(CurrentValues.video_stamp);
-            Settings.timelapse_video.Values.Add(CurrentValues.timelapse_video);
-            Settings.loop_record.Values.Add(CurrentValues.loop_record);
-            Settings.motion_detec_video.Values.Add(CurrentValues.motion_detec_video);
-
-            Settings.video_resolution.currentValue = CurrentValues.video_resolution;
-            Settings.video_standard.currentValue = CurrentValues.video_standard;
-            Settings.video_quality.currentValue = CurrentValues.video_quality;
-            Settings.video_stamp.currentValue = CurrentValues.video_stamp;
-            Settings.timelapse_video.currentValue = CurrentValues.timelapse_video;
-            Settings.loop_record.currentValue = CurrentValues.loop_record;
-            Settings.motion_detec_video.currentValue = CurrentValues.motion_detec_video;
-            Settings.photo_size.currentValue = CurrentValues.photo_size;
-            Settings.photo_stamp.currentValue = CurrentValues.photo_stamp;
-            Settings.photo_quality.currentValue = CurrentValues.photo_quality;
-            Settings.selfie_photo.currentValue = CurrentValues.selfie_photo;
-            Settings.burst_photo.currentValue = CurrentValues.burst_photo;
-            Settings.autoshoot_photo.currentValue = CurrentValues.autoshoot_photo;
-
-            Settings.photo_size.Values.Add(CurrentValues.photo_size);
-            Settings.photo_stamp.Values.Add(CurrentValues.photo_stamp);
-            Settings.photo_quality.Values.Add(CurrentValues.photo_quality);
-            Settings.selfie_photo.Values.Add(CurrentValues.selfie_photo);
-            Settings.burst_photo.Values.Add(CurrentValues.burst_photo);
-            Settings.autoshoot_photo.Values.Add(CurrentValues.autoshoot_photo);
-            
+            Models.Settings.AddOrUpdate(Settings.autoshoot_photo, CurrentValues.autoshoot_photo);
+            Models.Settings.AddOrUpdate(Settings.auto_bkl_off, CurrentValues.auto_bkl_off);
+            Models.Settings.AddOrUpdate(Settings.auto_pwr_off, CurrentValues.auto_pwr_off);
+            Models.Settings.AddOrUpdate(Settings.burst_photo, CurrentValues.burst_photo);
+            Models.Settings.AddOrUpdate(Settings.buzzer, CurrentValues.buzzer);
+            Models.Settings.AddOrUpdate(Settings.cardvr_switch, CurrentValues.cardvr_switch);
+            Models.Settings.AddOrUpdate(Settings.date_disp_fmt, CurrentValues.date_disp_fmt);
+            Models.Settings.AddOrUpdate(Settings.delay_pwroff, CurrentValues.delay_pwroff);
+            Models.Settings.AddOrUpdate(Settings.language, CurrentValues.language);
+            Models.Settings.AddOrUpdate(Settings.light_freq, CurrentValues.light_freq);
+            Models.Settings.AddOrUpdate(Settings.loop_record, CurrentValues.loop_record);
+            Models.Settings.AddOrUpdate(Settings.meter_mode, CurrentValues.meter_mode);
+            Models.Settings.AddOrUpdate(Settings.mic_vol, CurrentValues.mic_vol);
+            Models.Settings.AddOrUpdate(Settings.motion_detec_video, CurrentValues.motion_detec_video);
+            Models.Settings.AddOrUpdate(Settings.osd_switch, CurrentValues.osd_switch);
+            Models.Settings.AddOrUpdate(Settings.photo_quality, CurrentValues.photo_quality);
+            Models.Settings.AddOrUpdate(Settings.photo_size, CurrentValues.photo_size);
+            Models.Settings.AddOrUpdate(Settings.photo_stamp, CurrentValues.photo_stamp);
+            Models.Settings.AddOrUpdate(Settings.rotate_image, CurrentValues.rotate_image);
+            Models.Settings.AddOrUpdate(Settings.save_low_resolution_clip, CurrentValues.save_low_resolution_clip);
+            Models.Settings.AddOrUpdate(Settings.selfie_photo, CurrentValues.selfie_photo);
+            Models.Settings.AddOrUpdate(Settings.status_led_switch, CurrentValues.status_led_switch);
+            Models.Settings.AddOrUpdate(Settings.stream_out_type, CurrentValues.stream_out_type);
+            Models.Settings.AddOrUpdate(Settings.timelapse_photo, CurrentValues.timelapse_photo);
+            Models.Settings.AddOrUpdate(Settings.timelapse_video, CurrentValues.timelapse_video);
+            Models.Settings.AddOrUpdate(Settings.video_quality, CurrentValues.video_quality);
+            Models.Settings.AddOrUpdate(Settings.video_resolution, CurrentValues.video_resolution);
+            Models.Settings.AddOrUpdate(Settings.video_stamp, CurrentValues.video_stamp);
+            Models.Settings.AddOrUpdate(Settings.video_standard, CurrentValues.video_standard);
+            Models.Settings.AddOrUpdate(Settings.wifi_led_switch, CurrentValues.wifi_led_switch);
         }
 
         /// <summary>
@@ -96,7 +97,7 @@ namespace SJ5000Plus.ViewModels
                 CBox.SelectedItem = null;
 
                 //Get the Values
-                CamGetParamValuesMessage Param = await (App.Current as App).Camera.GetParamValues(CBox.Name);
+                CamGetParamValuesMessage Param = await Camera.GetParamValues(CBox.Name);
 
                 // Get the Param and update its values with reflexion
                 Models.Param parameter = (Models.Param)GetParamByName(CBox.Name);

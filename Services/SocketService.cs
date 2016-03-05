@@ -46,44 +46,16 @@ namespace SJ5000Plus.Services
         /// </summary>
         public async Task<bool> Connect()
         {
-            try
-            {
-                _Socket = new StreamSocket();
-                _Socket.Control.OutboundBufferSizeInBytes = _OutboundBufferSize;
+            _Socket = new StreamSocket();
+            _Socket.Control.OutboundBufferSizeInBytes = _OutboundBufferSize;
 
-                await _Socket.ConnectAsync(_CameraHost, _port.ToString());
+            await _Socket.ConnectAsync(_CameraHost, _port.ToString());
 
-                // add after calling ConnectAsync on the StreamSocket Object
-                _reader = new DataReader(_Socket.InputStream);
-                _writer = new DataWriter(_Socket.OutputStream);
+            // add after calling ConnectAsync on the StreamSocket Object
+            _reader = new DataReader(_Socket.InputStream);
+            _writer = new DataWriter(_Socket.OutputStream);
 
-                return true;
-            }
-            catch (Exception exception)
-            {
-                Windows.UI.Popups.MessageDialog md = null;
-
-                switch (SocketError.GetStatus(exception.HResult))
-                {
-                    case SocketErrorStatus.Unknown:
-                        md = new Windows.UI.Popups.MessageDialog("Unknown Error: " + exception.Message, "Error");
-                        await md.ShowAsync();
-                        break;
-                    case SocketErrorStatus.ConnectionTimedOut:
-                        md = new Windows.UI.Popups.MessageDialog("Connection Timed Out", "Error");
-                        await md.ShowAsync();
-                        break;
-                    case SocketErrorStatus.HostNotFound:
-                        md = new Windows.UI.Popups.MessageDialog("Camera Not Found", "Error");
-                        await md.ShowAsync();
-                        break;
-                    default:
-                        md = new Windows.UI.Popups.MessageDialog("Error in connect: " + exception.Message, "Error");
-                        await md.ShowAsync();
-                        break;
-                }
-                return false;
-            }          
+            return true;     
         }
 
         /// <summary>

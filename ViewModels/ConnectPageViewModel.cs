@@ -59,6 +59,10 @@ namespace SJ5000Plus.ViewModels
             {
                 //Views.Busy.SetBusy(true, _BusyText);
                 Views.Busy.SetBusy(true, "Conectando");
+                if (Camera is FakeCameraService)
+                {
+                    await Task.Delay(1000);
+                }
                 try
                 {
                     if (await Camera.Connect())
