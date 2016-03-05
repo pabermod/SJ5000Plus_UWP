@@ -100,6 +100,7 @@
     <Compile Include="Globals.cs" />
     <Compile Include="Helpers.cs" />
     <Compile Include="Models\Camera.cs" />
+    <Compile Include="Models\FlipViewData.cs" />
     <Compile Include="Models\Param.cs" />
     <Compile Include="Models\Settings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

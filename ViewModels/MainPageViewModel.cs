@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
+using Windows.Graphics.Display;
 using Windows.UI.Xaml.Navigation;
 
 namespace SJ5000Plus.ViewModels
@@ -62,12 +63,17 @@ namespace SJ5000Plus.ViewModels
 
         public override Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
-            (App.Current as App).Camera = Camera as CameraService;
+            (App.Current as App).Camera = Camera;
             return Task.CompletedTask;
         }
 
         public override Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
+            // Clear History so ConnectPage is never accessed through Navigation History
+            NavigationService.ClearHistory();
+
+            // Any orientation
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
             Views.Shell.HamburgerMenu.IsFullScreen = false;
             Camera = (App.Current as App).Camera;
             return Task.CompletedTask;
