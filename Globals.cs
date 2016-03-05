@@ -9,7 +9,7 @@ namespace SJ5000Plus
 {
     public static class Globals
     {
-        // parameterless constructor required for static class
+        // Parameterless constructor required for static class
         static Globals()
         {
             isConnected = false;
