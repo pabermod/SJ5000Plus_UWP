@@ -20,6 +20,7 @@
             meter_mode = new Param();
             mic_vol = new Param();
             motion_detec_video = new Param();
+            osd_switch = new Param();
             photo_quality = new Param();
             photo_size = new Param();
             photo_stamp = new Param();
@@ -69,37 +70,5 @@
         public Param video_stamp { get; set; }
         public Param video_standard { get; set; }
         public Param wifi_led_switch { get; set; }
-
-        /// <summary>
-        /// Add or update a Param with the specified value
-        /// </summary>
-        /// <param name="param">Param to be updated</param>
-        /// <param name="value">Value to be updated into the Param</param>
-        /// <returns></returns>
-        public static Param AddOrUpdate(Param param, string value)
-        {
-            if (param == null)
-            {
-                return null;
-            } 
-            if (param.Values.Count == 0)
-            {
-                param.Values.Add(value);
-                param.currentValue = value;
-            }
-            else if (param.Values.Count == 1)
-            {
-                param.Values.Remove(param.currentValue);
-                param.Values.Add(value);
-                param.currentValue = value;
-            }
-            else if (param.currentValue != value)
-            {
-                // More than 1 value. Suppose the Collection is filled with
-                // all the possible values
-                param.currentValue = value;
-            }
-            return param;
-        }
     }
 }

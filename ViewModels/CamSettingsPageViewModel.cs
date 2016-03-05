@@ -1,26 +1,18 @@
 ﻿using SJ5000Plus.Services.CameraServices;
-using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading.Tasks;
 using Template10.Mvvm;
 using Vocabulary;
 using Vocabulary.Messages;
-using Windows.UI.Popups;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Template10.Services.NavigationService;
 
 namespace SJ5000Plus.ViewModels
 {
     public class CamSettingsPageViewModel : ViewModelBase
     {
         public ICameraService Camera;
-        public Models.Settings Settings { get; set; }
-
 
         /// <summary>
         /// ViewModel Constructor. Initializes the camera service, the lists and populates them.
@@ -30,11 +22,7 @@ namespace SJ5000Plus.ViewModels
             Settings = new Models.Settings();
         }
 
-        public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
-        {
-            Camera = (App.Current as App).Camera;
-            await PopulateAllSettings();
-        }
+        public Models.Settings Settings { get; set; }
 
         public override Task OnNavigatedFromAsync(IDictionary<string, object> suspensionState, bool suspending)
         {
@@ -42,45 +30,10 @@ namespace SJ5000Plus.ViewModels
             return Task.CompletedTask;
         }
 
-        /// <summary>
-        /// Populate the lists with the current values
-        /// </summary>
-        private async Task PopulateAllSettings()
+        public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {
-            // Get the current values
-            Vocabulary.Settings CurrentValues = await Camera.GetCurrentValues();
-
-            // Populate the current value and the lists
-            Models.Settings.AddOrUpdate(Settings.autoshoot_photo, CurrentValues.autoshoot_photo);
-            Models.Settings.AddOrUpdate(Settings.auto_bkl_off, CurrentValues.auto_bkl_off);
-            Models.Settings.AddOrUpdate(Settings.auto_pwr_off, CurrentValues.auto_pwr_off);
-            Models.Settings.AddOrUpdate(Settings.burst_photo, CurrentValues.burst_photo);
-            Models.Settings.AddOrUpdate(Settings.buzzer, CurrentValues.buzzer);
-            Models.Settings.AddOrUpdate(Settings.cardvr_switch, CurrentValues.cardvr_switch);
-            Models.Settings.AddOrUpdate(Settings.date_disp_fmt, CurrentValues.date_disp_fmt);
-            Models.Settings.AddOrUpdate(Settings.delay_pwroff, CurrentValues.delay_pwroff);
-            Models.Settings.AddOrUpdate(Settings.language, CurrentValues.language);
-            Models.Settings.AddOrUpdate(Settings.light_freq, CurrentValues.light_freq);
-            Models.Settings.AddOrUpdate(Settings.loop_record, CurrentValues.loop_record);
-            Models.Settings.AddOrUpdate(Settings.meter_mode, CurrentValues.meter_mode);
-            Models.Settings.AddOrUpdate(Settings.mic_vol, CurrentValues.mic_vol);
-            Models.Settings.AddOrUpdate(Settings.motion_detec_video, CurrentValues.motion_detec_video);
-            Models.Settings.AddOrUpdate(Settings.osd_switch, CurrentValues.osd_switch);
-            Models.Settings.AddOrUpdate(Settings.photo_quality, CurrentValues.photo_quality);
-            Models.Settings.AddOrUpdate(Settings.photo_size, CurrentValues.photo_size);
-            Models.Settings.AddOrUpdate(Settings.photo_stamp, CurrentValues.photo_stamp);
-            Models.Settings.AddOrUpdate(Settings.rotate_image, CurrentValues.rotate_image);
-            Models.Settings.AddOrUpdate(Settings.save_low_resolution_clip, CurrentValues.save_low_resolution_clip);
-            Models.Settings.AddOrUpdate(Settings.selfie_photo, CurrentValues.selfie_photo);
-            Models.Settings.AddOrUpdate(Settings.status_led_switch, CurrentValues.status_led_switch);
-            Models.Settings.AddOrUpdate(Settings.stream_out_type, CurrentValues.stream_out_type);
-            Models.Settings.AddOrUpdate(Settings.timelapse_photo, CurrentValues.timelapse_photo);
-            Models.Settings.AddOrUpdate(Settings.timelapse_video, CurrentValues.timelapse_video);
-            Models.Settings.AddOrUpdate(Settings.video_quality, CurrentValues.video_quality);
-            Models.Settings.AddOrUpdate(Settings.video_resolution, CurrentValues.video_resolution);
-            Models.Settings.AddOrUpdate(Settings.video_stamp, CurrentValues.video_stamp);
-            Models.Settings.AddOrUpdate(Settings.video_standard, CurrentValues.video_standard);
-            Models.Settings.AddOrUpdate(Settings.wifi_led_switch, CurrentValues.wifi_led_switch);
+            Camera = (App.Current as App).Camera;
+            await PopulateAllSettings();
         }
 
         /// <summary>
@@ -106,7 +59,7 @@ namespace SJ5000Plus.ViewModels
                 {
                     parameter.Values.Add(item);
                 }
-                
+
                 // Remove the first one (so it isn't repeated)
                 parameter.Values.RemoveAt(0);
 
@@ -137,6 +90,46 @@ namespace SJ5000Plus.ViewModels
                 return this.Settings.GetType().GetProperty(propertyName).GetValue(this.Settings, null);
             }
             catch { return null; }
+        }
+
+        /// <summary>
+        /// Populate the lists with the current values
+        /// </summary>
+        private async Task PopulateAllSettings()
+        {
+            // Get the current values
+            Vocabulary.Settings CurrentValues = await Camera.GetCurrentValues();
+
+            // Populate the Params
+            Settings.autoshoot_photo.AddOrUpdate(CurrentValues.autoshoot_photo);
+            Settings.auto_bkl_off.AddOrUpdate(CurrentValues.auto_bkl_off);
+            Settings.auto_pwr_off.AddOrUpdate(CurrentValues.auto_pwr_off);
+            Settings.burst_photo.AddOrUpdate(CurrentValues.burst_photo);
+            Settings.buzzer.AddOrUpdate(CurrentValues.buzzer);
+            Settings.cardvr_switch.AddOrUpdate(CurrentValues.cardvr_switch);
+            Settings.date_disp_fmt.AddOrUpdate(CurrentValues.date_disp_fmt);
+            Settings.delay_pwroff.AddOrUpdate(CurrentValues.delay_pwroff);
+            Settings.language.AddOrUpdate(CurrentValues.language);
+            Settings.light_freq.AddOrUpdate(CurrentValues.light_freq);
+            Settings.loop_record.AddOrUpdate(CurrentValues.loop_record);
+            Settings.meter_mode.AddOrUpdate(CurrentValues.meter_mode);
+            Settings.mic_vol.AddOrUpdate(CurrentValues.mic_vol);
+            Settings.motion_detec_video.AddOrUpdate(CurrentValues.motion_detec_video);
+            Settings.osd_switch.AddOrUpdate(CurrentValues.osd_switch);
+            Settings.photo_quality.AddOrUpdate(CurrentValues.photo_quality);
+            Settings.photo_size.AddOrUpdate(CurrentValues.photo_size);
+            Settings.photo_stamp.AddOrUpdate(CurrentValues.photo_stamp);
+            Settings.rotate_image.AddOrUpdate(CurrentValues.rotate_image);
+            Settings.save_low_resolution_clip.AddOrUpdate(CurrentValues.save_low_resolution_clip);
+            Settings.selfie_photo.AddOrUpdate(CurrentValues.selfie_photo);
+            Settings.status_led_switch.AddOrUpdate(CurrentValues.status_led_switch);
+            Settings.timelapse_photo.AddOrUpdate(CurrentValues.timelapse_photo);
+            Settings.timelapse_video.AddOrUpdate(CurrentValues.timelapse_video);
+            Settings.video_quality.AddOrUpdate(CurrentValues.video_quality);
+            Settings.video_resolution.AddOrUpdate(CurrentValues.video_resolution);
+            Settings.video_stamp.AddOrUpdate(CurrentValues.video_stamp);
+            Settings.video_standard.AddOrUpdate(CurrentValues.video_standard);
+            Settings.wifi_led_switch.AddOrUpdate(CurrentValues.wifi_led_switch);
         }
     }
 }

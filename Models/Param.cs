@@ -36,6 +36,36 @@ namespace SJ5000Plus.Models
             currentValue = string.Empty;
             Values = new ObservableCollection<string>();
         }
-      
+
+        /// <summary>
+        /// Add or update the Param with the specified value
+        /// </summary>
+        /// <param name="value">Value to be updated into the Param</param>
+        /// <returns></returns>
+        public void AddOrUpdate(string value)
+        {
+            if (value == null || value == string.Empty)
+            {
+                return;
+            }
+            if (Values.Count == 0)
+            {
+                Values.Add(value);
+                currentValue = value;
+            }
+            else if (Values.Count == 1)
+            {
+                Values.Remove(currentValue);
+                Values.Add(value);
+                currentValue = value;
+            }
+            else if (currentValue != value)
+            {
+                // More than 1 value. Suppose the Collection is filled with
+                // all the possible values
+                currentValue = value;
+            }
+        }
+
     }
 }
