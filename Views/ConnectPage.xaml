@@ -152,7 +152,7 @@
 
         <Grid Grid.Row="1" VerticalAlignment="Center" HorizontalAlignment="Center">
             <StackPanel>
-            <FlipView x:Name="FlipViewCamera"
+                <FlipView x:Name="FlipViewCamera"
                   Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
                   HorizontalAlignment="Center" 
                   MaxWidth="300"

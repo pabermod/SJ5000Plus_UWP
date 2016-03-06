@@ -57,7 +57,7 @@ namespace SJ5000Plus
         // runs only when not restored from state
         public override Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
-            // hide phone statusbar
+            // Show phone statusbar
             if (Windows.Foundation.Metadata.ApiInformation
                 .IsTypePresent("Windows.UI.ViewManagement.StatusBar"))
             {

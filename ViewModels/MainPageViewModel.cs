@@ -2,10 +2,13 @@ using SJ5000Plus.Services.CameraServices;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System;
 using Template10.Mvvm;
 using Template10.Services.NavigationService;
 using Windows.Graphics.Display;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace SJ5000Plus.ViewModels
 {
@@ -13,22 +16,30 @@ namespace SJ5000Plus.ViewModels
     {
         private bool _CameraButtonsEnabled;
         private string _ConnectionStatus = "No conectado";
-        private bool _ProgressVisibility;
+        private Visibility _ProgressVisibility;
         private ICameraService Camera;
         private Windows.UI.Xaml.Controls.Symbol _videoIcon;
+        private bool _isStatusBarPresent;
+        private Windows.UI.ViewManagement.StatusBar _StatusBar;
 
         public MainPageViewModel()
         {
-            ProgressVisibility = false;
+            ProgressVisibility = Visibility.Collapsed;
             CameraButtonsEnabled = false;
-            VideoIcon = Windows.UI.Xaml.Controls.Symbol.Video;
+            VideoIcon = Symbol.Video;
+            _isStatusBarPresent = Windows.Foundation.Metadata.ApiInformation
+                .IsTypePresent("Windows.UI.ViewManagement.StatusBar");
+            if (_isStatusBarPresent)
+            {
+                _StatusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+            }
             if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
             {
                 ConnectionStatus = "Conectado";
             }
         }
 
-        public Windows.UI.Xaml.Controls.Symbol VideoIcon
+        public Symbol VideoIcon
         {
             get { return _videoIcon; }
             set { Set(ref _videoIcon, value); }
@@ -56,7 +67,7 @@ namespace SJ5000Plus.ViewModels
             get { return new DelegateCommand<object>(VideoButtonClick, CanExecutePhotoClick); }
         }
 
-        public bool ProgressVisibility
+        public Visibility ProgressVisibility
         {
             get { return _ProgressVisibility; }
             set { Set(ref _ProgressVisibility, value); }
@@ -112,25 +123,42 @@ namespace SJ5000Plus.ViewModels
         private async void PhotoButtonClick(object context)
         {
             CameraButtonsEnabled = false;
-            ProgressVisibility = true;
-            string photo_location = await Camera.TakePhoto();
-            ProgressVisibility = false;
+            ConnectionStatus = "Taking Photo...";
+            if (_isStatusBarPresent)
+            {
+                _StatusBar.ProgressIndicator.Text = "Taking Photo...";
+                await _StatusBar.ProgressIndicator.ShowAsync();
+            }
+            ProgressVisibility = Visibility.Visible;
+
+            string photo_location = await Camera.TakePhoto();   
+                    
             if (photo_location != null)
             {
-                ConnectionStatus = photo_location;
+                ConnectionStatus = "Photo Taken: " + photo_location;
             }
+            await _StatusBar.ProgressIndicator.HideAsync();
             CameraButtonsEnabled = true;
+            ProgressVisibility = Visibility.Collapsed;
         }
 
         private async void VideoButtonClick(object context)
         {
             CameraButtonsEnabled = false;
-            ProgressVisibility = true;
+            if (_isStatusBarPresent)
+                await _StatusBar.ProgressIndicator.ShowAsync();
+            else
+                ProgressVisibility = Visibility.Visible;
             if (Camera.isRecording)
             {
                 string photo_location = await Camera.StopVideo();
                 if (photo_location != null)
                 {
+                    if (_isStatusBarPresent)
+                    {
+                        _StatusBar.ProgressIndicator.Text = "Video Taken: " + photo_location;
+                        await _StatusBar.ProgressIndicator.ShowAsync();
+                    }
                     ConnectionStatus = photo_location;
                 }
                 VideoIcon = Windows.UI.Xaml.Controls.Symbol.Video;
@@ -142,8 +170,11 @@ namespace SJ5000Plus.ViewModels
                 VideoIcon = Windows.UI.Xaml.Controls.Symbol.Stop;
                 Camera.isRecording = true;
             }        
-            ProgressVisibility = false;
             CameraButtonsEnabled = true;
+            if (_isStatusBarPresent)
+                await _StatusBar.ProgressIndicator.HideAsync();
+            else
+                ProgressVisibility = Visibility.Collapsed;
         }
     }
 }

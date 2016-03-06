@@ -6,6 +6,7 @@ using Template10.Mvvm;
 using Template10.Services.NavigationService;
 using Windows.Graphics.Display;
 using Windows.Networking.Sockets;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 
 namespace SJ5000Plus.ViewModels

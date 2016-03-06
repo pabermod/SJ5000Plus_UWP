@@ -55,9 +55,12 @@ namespace SJ5000Plus.Models
             }
             else if (Values.Count == 1)
             {
-                Values.Remove(currentValue);
-                Values.Add(value);
-                currentValue = value;
+                if (currentValue != value)
+                {
+                    Values.Remove(currentValue);
+                    Values.Add(value);
+                    currentValue = value;
+                }
             }
             else if (currentValue != value)
             {
