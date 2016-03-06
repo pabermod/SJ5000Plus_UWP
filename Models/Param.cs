@@ -46,9 +46,9 @@ namespace SJ5000Plus.Models
         {
             if (value == null || value == string.Empty)
             {
-                return;
+                currentValue = string.Empty;
             }
-            if (Values.Count == 0)
+            else if (Values.Count == 0)
             {
                 Values.Add(value);
                 currentValue = value;
