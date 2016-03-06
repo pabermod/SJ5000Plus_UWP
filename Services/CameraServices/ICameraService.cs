@@ -9,6 +9,8 @@ namespace SJ5000Plus.Services.CameraServices
 {
     public interface ICameraService
     {
+        bool isConnected { get; set; }
+        bool isRecording { get; set; }
         int token { get; set; }
         Task<Vocabulary.Settings> GetCurrentValues();
         Task<Vocabulary.Messages.CamGetParamValuesMessage> GetParamValues(string param);
@@ -18,6 +20,6 @@ namespace SJ5000Plus.Services.CameraServices
         Task<bool> GetToken();
         Task<string> TakePhoto();
         Task<bool> StartVideo();
-        Task<bool> StopVideo();
+        Task<string> StopVideo();
     }
 }

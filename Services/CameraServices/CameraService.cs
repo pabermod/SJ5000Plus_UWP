@@ -1,49 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Net;
 using System.Threading.Tasks;
-using SJ5000Plus.Models;
-using Vocabulary.Messages;
 using Vocabulary.MessageCodecs;
-using System.Net;
+using Vocabulary.Messages;
 
 namespace SJ5000Plus.Services.CameraServices
 {
     public class CameraService : ICameraService
     {
-        private bool _connected;
+        private const string CameraIP = "192.168.42.1";
+        private const int CameraPort = 7878;
+
         private SocketService _CameraSocket;
+        private bool _connected;
+        private bool _recording;
         private int _token = 0;
+
+        public CameraService(IPAddress CameraIP, int Port)
+        {
+            _CameraSocket = new SocketService(CameraIP.ToString(), Port);
+            _connected = false;
+            _recording = false;
+        }
+
+        public CameraService()
+        {
+            _CameraSocket = new SocketService(CameraIP, CameraPort);
+            _connected = false;
+            _recording = false;
+        }
+
+        public bool isConnected
+        {
+            get { return _connected; }
+            set { _connected = value; }
+        }
+
+        public bool isRecording
+        {
+            get { return _recording; }
+            set { _recording = value; }
+        }
 
         public int token
         {
             get { return _token; }
             set { _token = value; }
-        }
-
-        public CameraService(IPAddress CameraIP, int Port)
-        {
-            _CameraSocket = new SocketService(CameraIP.ToString(), Port);
-        }
-
-        /// <summary>
-        /// Send a string and returns true if sent
-        /// </summary>
-        private async Task<bool> Send(string Msg)
-        {
-            // Send the Message
-            await _CameraSocket.Send(Msg);
-            return true;
-        }
-
-        /// <summary>
-        /// Receive a string
-        /// </summary>
-        private async Task<string> Receive()
-        {
-            string MsgReceived = await _CameraSocket.Receive();
-            return MsgReceived;
         }
 
         /// <summary>
@@ -52,10 +53,7 @@ namespace SJ5000Plus.Services.CameraServices
         public async Task<bool> Connect()
         {
             _connected = await _CameraSocket.Connect();
-            if (_connected)
-                return true;
-            else
-                return false;
+            return _connected;
         }
 
         /// <summary>
@@ -64,52 +62,7 @@ namespace SJ5000Plus.Services.CameraServices
         public async Task<bool> Disconnect()
         {
             _connected = !(await _CameraSocket.Disconnect());
-            if (!_connected)
-                return true;
-            else
-                return false;
-        }
-
-        /// <summary>
-        /// Get a new Token and if successfull assigns it to the Token property
-        /// </summary>
-        public async Task<bool> GetToken()
-        {
-            // Create Token messages
-            UserTokenMessage GetTokenMsg = new UserTokenMessage();
-            CamTokenMessage CamTokenMsg = new CamTokenMessage();
-
-            UserTokenMessageCodec UserTokenCodec = new UserTokenMessageCodec();
-
-            // Send the Msg
-            if (await Send(await UserTokenCodec.Encode(GetTokenMsg)))
-            {
-                // If sent, get the response
-                string MsgReceived = await _CameraSocket.Receive();
-
-                CamTokenMessageCodec CamTokenCodec = new CamTokenMessageCodec();
-                CamTokenMsg = await CamTokenCodec.Decode(MsgReceived);
-
-                if (CamTokenMsg.rval != 0)
-                {
-                    return false; //Should throw exception
-                }
-                else if (CamTokenMsg.msg_id != GetTokenMsg.msg_id)
-                {
-                    return false; //Should throw exception
-                }
-                // Everything correct, return the token
-                else
-                {
-                    _token = CamTokenMsg.param;
-                    return true;
-                }
-            }
-            else
-            {
-                // If we don't have a response
-                return false; //Should throw exception
-            }
+            return !_connected;
         }
 
         /// <summary>
@@ -179,36 +132,45 @@ namespace SJ5000Plus.Services.CameraServices
         }
 
         /// <summary>
-        /// Request permission to set value of params. Returns true if permission granted
+        /// Get a new Token and if successfull assigns it to the Token property
         /// </summary>
-        private async Task<bool> RequestPermission()
+        public async Task<bool> GetToken()
         {
-            // Create the message
-            UserRequestEditParamMessage UserMsg = new UserRequestEditParamMessage(_token);
+            // Create Token messages
+            UserTokenMessage GetTokenMsg = new UserTokenMessage();
+            CamTokenMessage CamTokenMsg = new CamTokenMessage();
 
-            // Get the codec
-            UserRequestEditParamMessageCodec UserMsgCodec = new UserRequestEditParamMessageCodec();
+            UserTokenMessageCodec UserTokenCodec = new UserTokenMessageCodec();
 
-            // Send the message
-            if (await Send(await UserMsgCodec.Encode(UserMsg)))
+            // Send the Msg
+            if (await Send(await UserTokenCodec.Encode(GetTokenMsg)))
             {
-                // If sent get the response
+                // If sent, get the response
                 string MsgReceived = await _CameraSocket.Receive();
 
-                // Get the codec
-                CameraMessageCodec CamMsgCodec = new CameraMessageCodec();
+                CamTokenMessageCodec CamTokenCodec = new CamTokenMessageCodec();
+                CamTokenMsg = await CamTokenCodec.Decode(MsgReceived);
 
-                // Decode the string
-                CameraMessage CamMsg = await CamMsgCodec.Decode(MsgReceived);
-
-                if (CamMsg.rval != 0 || CamMsg.msg_id != UserMsg.msg_id)
+                if (CamTokenMsg.rval != 0)
                 {
-                    return false;
+                    return false; //Should throw exception
                 }
-                return true;
+                else if (CamTokenMsg.msg_id != GetTokenMsg.msg_id)
+                {
+                    return false; //Should throw exception
+                }
+                // Everything correct, return the token
+                else
+                {
+                    _token = CamTokenMsg.param;
+                    return true;
+                }
             }
-            // Couldn't send
-            return false;
+            else
+            {
+                // If we don't have a response
+                return false; //Should throw exception
+            }
         }
 
         /// <summary>
@@ -255,6 +217,89 @@ namespace SJ5000Plus.Services.CameraServices
             return false;
         }
 
+        public async Task<bool> StartVideo()
+        {
+            // Start Recording
+            // ->{"msg_id":513,"token":1}
+            // <-{"rval":0,"msg_id":513 }
+            // <-{ "msg_id": 7, "type": "start_video_record" }
+
+            UserStartVideoMessage UsrMsg = new UserStartVideoMessage(_token);
+
+            UserStartVideoMessageCodec UsrMsgCodec = new UserStartVideoMessageCodec();
+            // Send the message
+            if (await Send(await UsrMsgCodec.Encode(UsrMsg)))
+            {
+                // If sent, get the first response message
+                string MsgReceived = await _CameraSocket.Receive();
+                CameraMessageCodec CamEchoCodec = new CameraMessageCodec();
+                CameraMessage CamEchoMsg = await CamEchoCodec.Decode(MsgReceived);
+
+                if (CamEchoMsg.msg_id != UsrMsg.msg_id)
+                {
+                    return false;
+                }
+
+                //Receive the start_video message
+                MsgReceived = null;
+                MsgReceived = await _CameraSocket.Receive();
+                CamStartCaptureMessageCodec CamCodec = new CamStartCaptureMessageCodec();
+                CamStartCaptureMessage CamMsg = await CamCodec.Decode(MsgReceived);
+
+                // Check if photo capture is started
+                if (CamMsg.msg_id != CamStartCaptureMessage.msg_id_expected && !CamMsg.type.Equals(CamStartCaptureMessage.video_expected))
+                {
+                    return false;
+                }
+                // If everything OK, return true
+                _recording = true;
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<string> StopVideo()
+        {
+            // Stop recording
+            // ->{"msg_id":514,"token":1}
+            // <-{"rval":0,"msg_id":514,"param":"/tmp/fuse_d/DCIM/100MEDIA/SJCM0003.mp4"}
+            // <-{ "msg_id": 7, "type": "video_record_complete" ,"param":"/tmp/fuse_d/DCIM/100MEDIA/SJCM0003.mp4"}
+
+            UserStopVideoMessage UsrMsg = new UserStopVideoMessage(_token);
+            UserStopVideoMessageCodec UsrCodec = new UserStopVideoMessageCodec();
+
+            // Send the message
+            string MsgSent = await UsrCodec.Encode(UsrMsg);
+            if (await Send(MsgSent))
+            {
+                // Receive the echo message
+                string MsgReceived = await _CameraSocket.Receive();
+                CamParamMessageCodec CamEchoCodec = new CamParamMessageCodec();
+                CamParamMessage CamEchoMsg = await CamEchoCodec.Decode(MsgReceived);
+
+                if (CamEchoMsg.msg_id != UsrMsg.msg_id)
+                {
+                    return null;
+                }
+
+                //Receive the video completed message
+                MsgReceived = await _CameraSocket.Receive();
+                CamCaptureDoneMessageCodec CptrDoneCodec = new CamCaptureDoneMessageCodec();
+                CamCaptureDoneMessage CptrDoneMsg = await CptrDoneCodec.Decode(MsgReceived);
+
+                // Check if msg_id and type are the expected
+                if (CptrDoneMsg.msg_id != CamCaptureDoneMessage.msg_id_expected && !CptrDoneMsg.type.Equals(CamCaptureDoneMessage.video_expected))
+                {
+                    return null;
+                }
+
+                _recording = false;
+                // Return the location of the taken photo
+                return GetMediaLocation(CptrDoneMsg.param);
+            }
+            return null;
+        }
+
         public async Task<string> TakePhoto()
         {
             // Take Photo
@@ -267,7 +312,8 @@ namespace SJ5000Plus.Services.CameraServices
             UserTakePhotoMessage UsrMsg = new UserTakePhotoMessage(_token);
             UserTakePhotoMessageCodec UsrMsgCodec = new UserTakePhotoMessageCodec();
             // Send the message
-            if (await Send(await UsrMsgCodec.Encode(UsrMsg)))
+            string MsgSent = await UsrMsgCodec.Encode(UsrMsg);
+            if (await Send(MsgSent))
             {
                 // If sent, get the first response message
                 string MsgReceived = await _CameraSocket.Receive();
@@ -279,9 +325,9 @@ namespace SJ5000Plus.Services.CameraServices
                     return null;
                 }
 
-                //Receive the start_photo_capture message   
+                //Receive the start_photo_capture message
                 MsgReceived = null;
-                MsgReceived = await _CameraSocket.Receive();            
+                MsgReceived = await _CameraSocket.Receive();
                 CamStartCaptureMessageCodec CamCodec = new CamStartCaptureMessageCodec();
                 CamStartCaptureMessage CamMsg = await CamCodec.Decode(MsgReceived);
 
@@ -316,66 +362,79 @@ namespace SJ5000Plus.Services.CameraServices
                 }
 
                 // Return the location of the taken photo
-                ///tmp/fuse_d/DCIM/100MEDIA/SJCM0004.jpg
-                string[] directories = CptrDoneMsg.param.Split('/');
-                string photoLocation = string.Empty;
-                for (int i = 3; i < directories.Length; i++)
-                {
-                    photoLocation += "/" + directories[i];
-                }
-                return photoLocation;
+                return GetMediaLocation(CptrDoneMsg.param);
             }
             // If there is a problem
             return null;
         }
 
-        public async Task<bool> StartVideo()
+        /// <summary>
+        /// Returns the media location for a given full path
+        /// </summary>
+        /// <param name="fullPath">Path like: /tmp/fuse_d/DCIM/100MEDIA/SJCM0004.jpg</param>
+        /// <returns> Location like: DCIM/100MEDIA/SJCM0004.jpg</returns>
+        private string GetMediaLocation(string fullPath)
         {
-            // Start Recording
-            // ->{"msg_id":513,"token":1}
-            // <-{"rval":0,"msg_id":513 }
-            // <-{ "msg_id": 7, "type": "start_video_record" }
-
-            UserStartVideoMessage UsrMsg = new UserStartVideoMessage(_token);
-
-            UserStartVideoMessageCodec UsrMsgCodec = new UserStartVideoMessageCodec();
-            // Send the message
-            if (await Send(await UsrMsgCodec.Encode(UsrMsg)))
+            // Return the location of the taken photo
+            // /tmp/fuse_d/DCIM/100MEDIA/SJCM0004.jpg
+            string[] directories = fullPath.Split('/');
+            string photoLocation = string.Empty;
+            for (int i = 3; i < directories.Length; i++)
             {
-                // If sent, get the first response message
-                string MsgReceived = await _CameraSocket.Receive();
-                CameraMessageCodec CamEchoCodec = new CameraMessageCodec();
-                CameraMessage CamEchoMsg = await CamEchoCodec.Decode(MsgReceived);
-
-                if (CamEchoMsg.msg_id != UsrMsg.msg_id)
-                {
-                    return false;
-                }
-
-                //Receive the start_video message   
-                MsgReceived = null;
-                MsgReceived = await _CameraSocket.Receive();
-                CamStartCaptureMessageCodec CamCodec = new CamStartCaptureMessageCodec();
-                CamStartCaptureMessage CamMsg = await CamCodec.Decode(MsgReceived);
-
-                // Check if photo capture is started
-                if (CamMsg.msg_id != CamStartCaptureMessage.msg_id_expected && !CamMsg.type.Equals(CamStartCaptureMessage.video_expected))
-                {
-                    return false;
-                }
-                // If everything OK, return true
-                return true;
+                photoLocation += "/" + directories[i];
             }
-            return false;
-           
+            return photoLocation;
         }
 
-        public async Task<bool> StopVideo()
+        /// <summary>
+        /// Receive a string
+        /// </summary>
+        private async Task<string> Receive()
         {
-            // Stop recording
-            // ->{"msg_id":514,"token":1}
-            // <-{"rval":0,"msg_id":514,"param":"/tmp/fuse_d/DCIM/100MEDIA/SJCM0003.mp4"}
-            // <-{ "msg_id": 7, "type": "video_record_complete" ,"param":"/tmp/fuse_d/DCIM/100MEDIA/SJCM0003.mp4"}
+            string MsgReceived = await _CameraSocket.Receive();
+            return MsgReceived;
+        }
+
+        /// <summary>
+        /// Request permission to set value of params. Returns true if permission granted
+        /// </summary>
+        private async Task<bool> RequestPermission()
+        {
+            // Create the message
+            UserRequestEditParamMessage UserMsg = new UserRequestEditParamMessage(_token);
+
+            // Get the codec
+            UserRequestEditParamMessageCodec UserMsgCodec = new UserRequestEditParamMessageCodec();
+
+            // Send the message
+            if (await Send(await UserMsgCodec.Encode(UserMsg)))
+            {
+                // If sent get the response
+                string MsgReceived = await _CameraSocket.Receive();
+
+                // Get the codec
+                CameraMessageCodec CamMsgCodec = new CameraMessageCodec();
+
+                // Decode the string
+                CameraMessage CamMsg = await CamMsgCodec.Decode(MsgReceived);
+
+                if (CamMsg.rval != 0 || CamMsg.msg_id != UserMsg.msg_id)
+                {
+                    return false;
+                }
+                return true;
+            }
+            // Couldn't send
+            return false;
+        }
+
+        /// <summary>
+        /// Send a string and returns true if sent
+        /// </summary>
+        private async Task<bool> Send(string Msg)
+        {
+            // Send the Message
+            await _CameraSocket.Send(Msg);
             return true;
         }
     }

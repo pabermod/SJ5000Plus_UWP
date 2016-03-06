@@ -66,10 +66,10 @@ namespace SJ5000Plus
                     if (ip != string.Empty)
                     {
                         IPAddress TheIP = IPAddress.Parse(ip);
-                        Globals.SetLocalIP(TheIP);
+                        Globals.LocalIP = TheIP;
                         string[] nums = ip.Split('.');
                         string CamIP = nums[0] + "." + nums[1] + "." + nums[2] + ".1";
-                        Globals.SetCameraIP(IPAddress.Parse(CamIP));
+                        Globals.CameraIP = IPAddress.Parse(CamIP);
                         return true;
                     }
                     return false;

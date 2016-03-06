@@ -68,8 +68,7 @@
         </StackPanel>
         <StackPanel Grid.Row="2">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,20">
-                <Button 
-                        Command="{Binding PhotoButtonClickCommand}"
+                <Button Command="{Binding PhotoButtonClickCommand}"
                         IsEnabled="{Binding CameraButtonsEnabled}"
                         Style="{ThemeResource TransparentButtonStyle}"
                         Margin="0,0,20,0">
@@ -79,11 +78,11 @@
                         </SymbolIcon.RenderTransform>
                     </SymbolIcon>
                 </Button>
-                <Button 
+                <Button Command="{Binding VideoButtonClickCommand}"
                         IsEnabled="{Binding CameraButtonsEnabled}"
                         Margin="20,0,0,0" 
                         Style="{ThemeResource TransparentButtonStyle}">
-                    <SymbolIcon Width="48" Height="48" Symbol="Video" RenderTransformOrigin="0.5,0.5">
+                    <SymbolIcon Width="48" Height="48" Symbol="{Binding VideoIcon}" RenderTransformOrigin="0.5,0.5">
                         <SymbolIcon.RenderTransform>
                             <CompositeTransform ScaleX="2" ScaleY="2"/>
                         </SymbolIcon.RenderTransform>

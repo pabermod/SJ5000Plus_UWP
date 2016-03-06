@@ -66,7 +66,7 @@ namespace SJ5000Plus
             }
 
             //Camera = new CameraService(Globals.CameraIP, Globals.CameraPort);
-            Camera = new FakeCameraService();
+            //Camera = new FakeCameraService();
             NavigationService.Navigate(typeof(Views.ConnectPage));
             return Task.CompletedTask;
         }

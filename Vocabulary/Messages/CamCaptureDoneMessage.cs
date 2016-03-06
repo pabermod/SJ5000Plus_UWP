@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace Vocabulary.Messages
 {
-    public class CamCaptureDoneMessage : CamStartCaptureMessage
+    public class CamCaptureDoneMessage : Message
     {
-        public static new string photo_expected = "photo_taken";
-        public static new string video_expected = "video_record_complete";
+        public const int msg_id_expected = 7;
+        public const string photo_expected = "photo_taken";
+        public const string video_expected = "video_record_complete";
 
+        public string type { get; set; }
         public string param { get; set; }
     }
 }

@@ -124,6 +124,7 @@
     <Compile Include="MessageCodecs\UserSetParamMessageCodec.cs" />
     <Compile Include="MessageCodecs\UserSettingsMessageCodec.cs" />
     <Compile Include="MessageCodecs\UserStartVideoMessageCodec.cs" />
+    <Compile Include="MessageCodecs\UserStopVideoMessageCodec.cs" />
     <Compile Include="MessageCodecs\UserTakePhotoMessageCodec.cs" />
     <Compile Include="MessageCodecs\UserTokenMessageCodec.cs" />
     <Compile Include="Messages\CamCaptureDoneMessage.cs" />
@@ -137,6 +138,7 @@
     <Compile Include="Messages\Message.cs" />
     <Compile Include="Messages\UserGetParamValueMessage.cs" />
     <Compile Include="Messages\UserStartVideoMessage.cs" />
+    <Compile Include="Messages\UserStopVideoMessage.cs" />
     <Compile Include="Messages\UserTakePhotoMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Messages\UserGetParamValuesMessage.cs" />

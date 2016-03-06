@@ -201,10 +201,15 @@
         </Grid>
         <Grid Grid.Row="2">
             <Button HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Command="{x:Bind ViewModel.ConnectCommand}" 
-                        IsEnabled="{x:Bind ViewModel.ButtonEnabled}"
-                        Content="Conectar"/>
+                    VerticalAlignment="Center"
+                    Command="{x:Bind ViewModel.ConnectCommand}" 
+                    IsEnabled="{x:Bind ViewModel.ButtonEnabled}"
+                    Content="Conectar"/>
+            <Button HorizontalAlignment="Right"
+                    VerticalAlignment="Center"
+                    Command="{x:Bind ViewModel.FakeConnectCommand}" 
+                    IsEnabled="{x:Bind ViewModel.ButtonEnabled}"
+                    Content="Fake"/>
         </Grid>
     </Grid>
 </Page>

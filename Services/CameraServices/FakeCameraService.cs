@@ -6,16 +6,39 @@ namespace SJ5000Plus.Services.CameraServices
 {
     public class FakeCameraService : ICameraService
     {
+        private bool _connected;
+        private bool _recording;
+
+        public FakeCameraService()
+        {
+            _connected = false;
+            _recording = false;
+        }
+
+        public bool isConnected
+        {
+            get { return _connected; }
+            set { _connected = value; }
+        }
+
+        public bool isRecording
+        {
+            get { return _recording; }
+            set { _recording = value; }
+        }
+
         public int token { get; set; }
 
         public async Task<bool> Connect()
         {
-            return true;
+            _connected = true;
+            return _connected;
         }
 
         public async Task<bool> Disconnect()
         {
-            return true;
+            _connected = false;
+            return !_connected;
         }
 
         public async Task<Vocabulary.Settings> GetCurrentValues()
@@ -80,19 +103,21 @@ namespace SJ5000Plus.Services.CameraServices
             return true;
         }
 
-        public Task<bool> StartVideo()
+        public async Task<bool> StartVideo()
         {
-            throw new NotImplementedException();
+            _recording = true;
+            return true;
         }
 
-        public Task<bool> StopVideo()
+        public async Task<string> StopVideo()
         {
-            throw new NotImplementedException();
+            _recording = false;
+            return "DCIM/100MEDIA/SJCM0004.mp4";
         }
 
-        public Task<string> TakePhoto()
+        public async Task<string> TakePhoto()
         {
-            throw new NotImplementedException();
+            return "DCIM/100MEDIA/SJCM0006.jpg";
         }
     }
 }

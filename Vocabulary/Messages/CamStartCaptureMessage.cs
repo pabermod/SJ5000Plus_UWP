@@ -8,9 +8,9 @@ namespace Vocabulary.Messages
 {
     public class CamStartCaptureMessage : Message
     {
-        public static int msg_id_expected = 7;
-        public static string photo_expected = "start_photo_capture";
-        public static string video_expected = "start_video_record";
+        public const int msg_id_expected = 7;
+        public const string photo_expected = "start_photo_capture";
+        public const string video_expected = "start_video_record";
 
         public string type { get; set; }
     }
