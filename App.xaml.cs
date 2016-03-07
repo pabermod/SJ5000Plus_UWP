@@ -65,8 +65,6 @@ namespace SJ5000Plus
                 Windows.UI.ViewManagement.StatusBar.GetForCurrentView().BackgroundOpacity = 1;
             }
 
-            //Camera = new CameraService(Globals.CameraIP, Globals.CameraPort);
-            //Camera = new FakeCameraService();
             NavigationService.Navigate(typeof(Views.ConnectPage));
             return Task.CompletedTask;
         }

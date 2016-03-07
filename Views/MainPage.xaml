@@ -63,16 +63,16 @@
         <!--  page content  -->
         <StackPanel Grid.Row="1" VerticalAlignment="Top"
                     Padding="0,10,0,0">
-            <TextBlock HorizontalAlignment="Center" Text="{Binding ConnectionStatus}"></TextBlock>
+            <TextBlock HorizontalAlignment="Center" Text="{x:Bind ViewModel.ConnectionStatus, Mode=OneWay}"></TextBlock>
             <ProgressBar IsIndeterminate="True" 
                          Width="200"
                          Background="{ThemeResource ApplicationPageBackgroundThemeBrush}"
-                         Visibility="{Binding ProgressVisibility}"/>
+                         Visibility="{x:Bind ViewModel.ProgressVisibility, Mode=OneWay}"/>
         </StackPanel>
         <StackPanel Grid.Row="2">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,20">
-                <Button Command="{Binding PhotoButtonClickCommand}"
-                        IsEnabled="{Binding CameraButtonsEnabled}"
+                <Button Command="{x:Bind ViewModel.PhotoButtonClickCommand}"
+                        IsEnabled="{x:Bind ViewModel.CameraButtonsEnabled}"
                         Style="{ThemeResource TransparentButtonStyle}"
                         Margin="0,0,20,0">
                     <SymbolIcon Width="48" Height="48" Symbol="Camera" RenderTransformOrigin="0.5,0.5" >
@@ -81,11 +81,11 @@
                         </SymbolIcon.RenderTransform>
                     </SymbolIcon>
                 </Button>
-                <Button Command="{Binding VideoButtonClickCommand}"
-                        IsEnabled="{Binding CameraButtonsEnabled}"
+                <Button Command="{x:Bind ViewModel.VideoButtonClickCommand}"
+                        IsEnabled="{x:Bind ViewModel.CameraButtonsEnabled, Mode=OneWay}"
                         Margin="20,0,0,0" 
                         Style="{ThemeResource TransparentButtonStyle}">
-                    <SymbolIcon Width="48" Height="48" Symbol="{Binding VideoIcon}" RenderTransformOrigin="0.5,0.5">
+                    <SymbolIcon Width="48" Height="48" Symbol="{x:Bind ViewModel.VideoIcon, Mode=OneWay}" RenderTransformOrigin="0.5,0.5">
                         <SymbolIcon.RenderTransform>
                             <CompositeTransform ScaleX="2" ScaleY="2"/>
                         </SymbolIcon.RenderTransform>

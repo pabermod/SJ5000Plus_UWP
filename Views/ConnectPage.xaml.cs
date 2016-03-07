@@ -15,10 +15,6 @@ namespace SJ5000Plus.Views
 
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-            // Get the data for the FlipView
-            var ViewData = new Models.FlipViewDataSource();
-            FlipViewCamera.ItemsSource = ViewData.Items;
-            ContextControl.ItemsSource = ViewData.Items;
             ContextControl.SelectionChanged += ContextControl_SelectionChanged;
         }
 

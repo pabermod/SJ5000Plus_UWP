@@ -15,28 +15,16 @@ namespace SJ5000Plus.ViewModels
     public class MainPageViewModel : ViewModelBase
     {
         private bool _CameraButtonsEnabled;
-        private string _ConnectionStatus = "No conectado";
+        private string _ConnectionStatus = "Conectado";
         private Visibility _ProgressVisibility;
         private ICameraService Camera;
-        private Windows.UI.Xaml.Controls.Symbol _videoIcon;
-        private bool _isStatusBarPresent;
-        private Windows.UI.ViewManagement.StatusBar _StatusBar;
+        private Symbol _videoIcon;
 
         public MainPageViewModel()
         {
             ProgressVisibility = Visibility.Collapsed;
             CameraButtonsEnabled = false;
             VideoIcon = Symbol.Video;
-            _isStatusBarPresent = Windows.Foundation.Metadata.ApiInformation
-                .IsTypePresent("Windows.UI.ViewManagement.StatusBar");
-            if (_isStatusBarPresent)
-            {
-                _StatusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-            }
-            if (Windows.ApplicationModel.DesignMode.DesignModeEnabled)
-            {
-                ConnectionStatus = "Conectado";
-            }
         }
 
         public Symbol VideoIcon
@@ -99,7 +87,6 @@ namespace SJ5000Plus.ViewModels
 
             // Any orientation
             DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
-            Views.Shell.HamburgerMenu.IsFullScreen = false;
             
             if (Camera.isConnected)
             {
@@ -124,11 +111,6 @@ namespace SJ5000Plus.ViewModels
         {
             CameraButtonsEnabled = false;
             ConnectionStatus = "Taking Photo...";
-            if (_isStatusBarPresent)
-            {
-                _StatusBar.ProgressIndicator.Text = "Taking Photo...";
-                await _StatusBar.ProgressIndicator.ShowAsync();
-            }
             ProgressVisibility = Visibility.Visible;
 
             string photo_location = await Camera.TakePhoto();   
@@ -137,7 +119,6 @@ namespace SJ5000Plus.ViewModels
             {
                 ConnectionStatus = "Photo Taken: " + photo_location;
             }
-            await _StatusBar.ProgressIndicator.HideAsync();
             CameraButtonsEnabled = true;
             ProgressVisibility = Visibility.Collapsed;
         }
@@ -145,36 +126,28 @@ namespace SJ5000Plus.ViewModels
         private async void VideoButtonClick(object context)
         {
             CameraButtonsEnabled = false;
-            if (_isStatusBarPresent)
-                await _StatusBar.ProgressIndicator.ShowAsync();
-            else
-                ProgressVisibility = Visibility.Visible;
+            ConnectionStatus = "Taking Video...";
+            ProgressVisibility = Visibility.Visible;
             if (Camera.isRecording)
             {
                 string photo_location = await Camera.StopVideo();
                 if (photo_location != null)
                 {
-                    if (_isStatusBarPresent)
-                    {
-                        _StatusBar.ProgressIndicator.Text = "Video Taken: " + photo_location;
-                        await _StatusBar.ProgressIndicator.ShowAsync();
-                    }
-                    ConnectionStatus = photo_location;
+                    ConnectionStatus = "Video Taken: " + photo_location;
                 }
-                VideoIcon = Windows.UI.Xaml.Controls.Symbol.Video;
+                VideoIcon = Symbol.Video;
                 Camera.isRecording = false;
+                ProgressVisibility = Visibility.Collapsed;
             }
             else
             {
                 await Camera.StartVideo();
-                VideoIcon = Windows.UI.Xaml.Controls.Symbol.Stop;
+                VideoIcon = Symbol.Stop;
                 Camera.isRecording = true;
+                ConnectionStatus = "Recording";
             }        
             CameraButtonsEnabled = true;
-            if (_isStatusBarPresent)
-                await _StatusBar.ProgressIndicator.HideAsync();
-            else
-                ProgressVisibility = Visibility.Collapsed;
+            ProgressVisibility = Visibility.Collapsed;
         }
     }
 }

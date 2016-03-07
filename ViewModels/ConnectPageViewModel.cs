@@ -1,4 +1,5 @@
-﻿using SJ5000Plus.Services.CameraServices;
+﻿using SJ5000Plus.Models;
+using SJ5000Plus.Services.CameraServices;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -6,7 +7,6 @@ using Template10.Mvvm;
 using Template10.Services.NavigationService;
 using Windows.Graphics.Display;
 using Windows.Networking.Sockets;
-using Windows.UI.Xaml;
 using Windows.UI.Xaml.Navigation;
 
 namespace SJ5000Plus.ViewModels
@@ -16,8 +16,14 @@ namespace SJ5000Plus.ViewModels
         private bool _ButtonEnabled;
         private DelegateCommand _ConnectCommand;
         private DelegateCommand _FakeConnectCommand;
+        private FlipViewDataSource _FlipViewSource;
         private bool _ProgressVisibility;
         private ICameraService Camera;
+
+        public ConnectPageViewModel()
+        {
+            FlipViewDataSource = new Models.FlipViewDataSource();
+        }
 
         public bool ButtonEnabled
         {
@@ -28,7 +34,6 @@ namespace SJ5000Plus.ViewModels
         public DelegateCommand ConnectCommand
             => _ConnectCommand ?? (_ConnectCommand = new DelegateCommand(async () =>
             {
-                //Views.Busy.SetBusy(true, _BusyText);
                 Views.Busy.SetBusy(true, "Conectando");
                 Camera = new CameraService();
                 try
@@ -88,6 +93,12 @@ namespace SJ5000Plus.ViewModels
                 Views.Busy.SetBusy(false);
             }, () => !string.IsNullOrEmpty("Fake Conectando")));
 
+        public FlipViewDataSource FlipViewDataSource
+        {
+            get { return _FlipViewSource; }
+            set { Set(ref _FlipViewSource, value); }
+        }
+
         public bool ProgressVisibility
         {
             get { return _ProgressVisibility; }
@@ -114,6 +125,9 @@ namespace SJ5000Plus.ViewModels
         public override Task OnNavigatingFromAsync(NavigatingEventArgs args)
         {
             args.Cancel = false;
+
+            // Show the Hamburger Menu
+            Views.Shell.HamburgerMenu.IsFullScreen = false;
             return Task.CompletedTask;
         }
     }
