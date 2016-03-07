@@ -72,7 +72,7 @@
         <StackPanel Grid.Row="2">
             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal" Margin="0,0,0,20">
                 <Button Command="{x:Bind ViewModel.PhotoButtonClickCommand}"
-                        IsEnabled="{x:Bind ViewModel.CameraButtonsEnabled}"
+                        IsEnabled="{x:Bind ViewModel.PhotoButtonEnabled, Mode=OneWay}"
                         Style="{ThemeResource TransparentButtonStyle}"
                         Margin="0,0,20,0">
                     <SymbolIcon Width="48" Height="48" Symbol="Camera" RenderTransformOrigin="0.5,0.5" >
@@ -82,7 +82,7 @@
                     </SymbolIcon>
                 </Button>
                 <Button Command="{x:Bind ViewModel.VideoButtonClickCommand}"
-                        IsEnabled="{x:Bind ViewModel.CameraButtonsEnabled, Mode=OneWay}"
+                        IsEnabled="{x:Bind ViewModel.VideoButtonEnabled, Mode=OneWay}"
                         Margin="20,0,0,0" 
                         Style="{ThemeResource TransparentButtonStyle}">
                     <SymbolIcon Width="48" Height="48" Symbol="{x:Bind ViewModel.VideoIcon, Mode=OneWay}" RenderTransformOrigin="0.5,0.5">

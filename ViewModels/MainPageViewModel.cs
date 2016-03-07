@@ -14,7 +14,8 @@ namespace SJ5000Plus.ViewModels
 {
     public class MainPageViewModel : ViewModelBase
     {
-        private bool _CameraButtonsEnabled;
+        private bool _VideoButtonEnabled;
+        private bool _PhotoButtonEnabled;
         private string _ConnectionStatus = "Conectado";
         private Visibility _ProgressVisibility;
         private ICameraService Camera;
@@ -23,7 +24,8 @@ namespace SJ5000Plus.ViewModels
         public MainPageViewModel()
         {
             ProgressVisibility = Visibility.Collapsed;
-            CameraButtonsEnabled = false;
+            VideoButtonEnabled = false;
+            PhotoButtonEnabled = false;
             VideoIcon = Symbol.Video;
         }
 
@@ -33,10 +35,16 @@ namespace SJ5000Plus.ViewModels
             set { Set(ref _videoIcon, value); }
         }
 
-        public bool CameraButtonsEnabled
+        public bool VideoButtonEnabled
         {
-            get { return _CameraButtonsEnabled; }
-            set { Set(ref _CameraButtonsEnabled, value); }
+            get { return _VideoButtonEnabled; }
+            set { Set(ref _VideoButtonEnabled, value); }
+        }
+
+        public bool PhotoButtonEnabled
+        {
+            get { return _PhotoButtonEnabled; }
+            set { Set(ref _PhotoButtonEnabled, value); }
         }
 
         public string ConnectionStatus
@@ -90,7 +98,8 @@ namespace SJ5000Plus.ViewModels
             
             if (Camera.isConnected)
             {
-                CameraButtonsEnabled = true;
+                VideoButtonEnabled = true;
+                PhotoButtonEnabled = true;
             }
             return Task.CompletedTask;
         }
@@ -109,7 +118,8 @@ namespace SJ5000Plus.ViewModels
 
         private async void PhotoButtonClick(object context)
         {
-            CameraButtonsEnabled = false;
+            VideoButtonEnabled = false;
+            PhotoButtonEnabled = false;
             ConnectionStatus = "Taking Photo...";
             ProgressVisibility = Visibility.Visible;
 
@@ -119,17 +129,19 @@ namespace SJ5000Plus.ViewModels
             {
                 ConnectionStatus = "Photo Taken: " + photo_location;
             }
-            CameraButtonsEnabled = true;
+            VideoButtonEnabled = true;
+            PhotoButtonEnabled = true;
             ProgressVisibility = Visibility.Collapsed;
         }
 
         private async void VideoButtonClick(object context)
         {
-            CameraButtonsEnabled = false;
-            ConnectionStatus = "Taking Video...";
+            VideoButtonEnabled = false;
+            PhotoButtonEnabled = false;
             ProgressVisibility = Visibility.Visible;
             if (Camera.isRecording)
             {
+                ConnectionStatus = "Stopping Video...";
                 string photo_location = await Camera.StopVideo();
                 if (photo_location != null)
                 {
@@ -138,15 +150,17 @@ namespace SJ5000Plus.ViewModels
                 VideoIcon = Symbol.Video;
                 Camera.isRecording = false;
                 ProgressVisibility = Visibility.Collapsed;
+                PhotoButtonEnabled = true;
             }
             else
             {
+                ConnectionStatus = "Taking Video...";
                 await Camera.StartVideo();
                 VideoIcon = Symbol.Stop;
                 Camera.isRecording = true;
                 ConnectionStatus = "Recording";
             }        
-            CameraButtonsEnabled = true;
+            VideoButtonEnabled = true;
             ProgressVisibility = Visibility.Collapsed;
         }
     }
